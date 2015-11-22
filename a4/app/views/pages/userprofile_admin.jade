@@ -1,0 +1,43 @@
+extends ../layout
+block link
+  link(href="/css/detail.css",rel="stylesheet")
+block content
+  .container
+    .row
+      .col-md-5
+        .dl-horizontal
+          dt Email
+          dd= user.email
+          dt Name
+            if sessionuser.email == user.email || user.role <=10
+              a(href="/admin/user/edit/#{user._id}")
+                dd= user.name
+            else
+              dd= user.name
+          dt Description
+          dd= user.description
+          dt Location
+          dd
+            p(id="loca") Loading User Login Location...
+          dt Profile Image
+          dd
+            if sessionuser.email == user.email || user.role <=10
+              a(href="/admin/user/edit/#{user._id}")
+                img(src="/upload/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+            else
+              img(src="/upload/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+          if sessionuser.email == user.email || user.role <=10
+            dt Edit
+            dd 
+              a(target="_blank", href="/admin/user/edit/#{user._id}") Edit
+          if sessionuser.role == 20
+            if user.role <20
+              if user.role <= 10
+                dt Make Administrator
+                dd
+                  button.btn.btn-primary.userAdmin(type="button", data-id="#{user._id}",class="user-id-#{user._id}") Make Administrator
+              else
+                dt Revoke Administrator
+                dd
+                  button.btn.btn-primary.userAdmin(type="button", data-id="#{user._id}",class="user-id-#{user._id}") Revoke Administrator
+  script(src="/js/profile.js")

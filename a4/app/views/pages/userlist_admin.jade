@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Email
+            th Display Name
+            th Last Edit
+            th Visited
+            th Device
+            th IP
+            th View
+            th Delete
+        tbody
+          each item in users
+            tr(class="item-id-#{item._id} clickable-row", data-href="/admin/user/profile/#{item._id}")
+              td #{item.email}
+              td #{item.name}        
+              td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
+              td #{item.pv}
+              td #{item.devices}
+              td #{item.ip}            
+              td: a(target="_blank", href="/admin/user/profile/#{item._id}") View
+              td
+                if sessionuser.email != item.email
+                  if item.role <= 10
+                    button.btn.btn-danger.userDel(type="button", data-id="#{item._id}") Delete
+        
+  script(src="/js/list.js")       
