@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    div.container-fluid
+    div.row
+        div.col-md-4
+        div.col-md-4
+            h1= title
+            br
+    div.row
+        div.col-md-4
+        div.col-md-4
+            form(action="/signup", method="POST")
+                if message != ''
+                    div.alert.alert-danger
+                        p= message
+                div.form-group
+                    label(for='email') Email address
+                    input(type='email', class='form-control', name='email', id='email')
+                div.form-group
+                    label(for='password') Password
+                    input(type='password', class='form-control', name='password', id='password')
+                div.form-group
+                    label(for='confirm-password') Confirm password
+                    input(type='password', class='form-control', name='confirm-password', id='confirm-password')
+                button(class="btn btn-default", type="submit") Submit

@@ -1,0 +1,21 @@
+div.navbar.navbar-inverse.navbar-fixed-top
+	div.container
+		if typeof(logged_in_user) != 'undefined'
+			div.navbar-header
+				a.navbar-brand(href="/users")
+					| A4
+			ul.nav.navbar-nav.navbar-right
+				- var profileUrl = "/users/" + encodeURIComponent(logged_in_user.email);
+				li
+					a(href=profileUrl, class="navbar-brand")
+						- var imgSrc = logged_in_user.image ? "/uploads/" + logged_in_user.image.split('/').pop() : '/images/default_profile_image.png';
+						img(src=imgSrc, class="img-circle", width="35", height="35", style="margin-top:-7px;")
+				li
+					- var profileText = logged_in_user.display_name !== '' && typeof(logged_in_user.display_name) != 'undefined' ? logged_in_user.display_name : logged_in_user.email
+					a(href=profileUrl)= profileText
+				li
+					a(href='/logout') Log out
+		else
+			div.navbar-header
+				a.navbar-brand(href="/")
+					| A4

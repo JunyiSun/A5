@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    div.container-fluid
+        div.row
+            div.col-md-4
+            div.col-md-4
+                h1(style='text-align:center') Welcome!
+                br
+        div.row
+            div.col-md-4
+            div.col-md-4
+                - var btnClasses = ['btn', 'btn-default', 'btn-lg', 'btn-block']
+                a(class=btnClasses, href='login', role='button') Login
+                br
+                a(class=btnClasses, href='signup', role='button') Sign Up

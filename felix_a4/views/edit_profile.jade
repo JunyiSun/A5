@@ -1,0 +1,55 @@
+extends layout
+
+block content
+    div.container-fluid
+    div.row
+        div.col-md-3
+        div.col-md-6
+            h3 Edit Profile
+            br
+    div.row
+        div.col-md-3
+        div.col-md-3
+            - var imgSrc = user.image ? "/uploads/" + user.image.split('/').pop() : '/images/default_profile_image.png';
+            img(class="img-responsive", src=imgSrc)
+            br
+            form(action='/users/upload_image/' + encodeURIComponent(user.email), method="POST", enctype="multipart/form-data")
+                div.form-group
+                    input(type='file', class='form-control', name='image')
+                div.form-group
+                    input(type='submit', class='form-control', value='Upload image')
+        div.col-md-3
+            - var formAction = "/users/update/" + encodeURIComponent(user.email);
+            form(action=formAction, method="POST")
+                div.form-group
+                    label(for='email') Email address
+                    input(type='email', class='form-control', name='email', id='email', value=user.email, readonly)
+                div.form-group
+                    label(for='display_name') Display name
+                    input(type='text', class='form-control', name='display_name', id='display_name', value=user.display_name)
+                div.form-group
+                    label(for='description') Description
+                    textarea(class='form-control', row='3', name='description', id='description', maxlength='499')= user.description
+                button(class="btn btn-default", type="submit") Update
+    div.row
+    div.col-md-3
+    div.col-md-3
+    div.col-md-3
+        br
+        h3 Change Password
+        br
+        if message != ''
+            div.alert.alert-danger
+                p= message
+        - var formAction = "/users/update/" + encodeURIComponent(user.email);
+        form(action=formAction, method="POST")
+            div.form-group
+                label(for='old_password') Old password
+                input(type='password', class='form-control', name='old_password', id='old_password')
+            div.form-group
+                label(for='new_password') New password
+                input(type='password', class='form-control', name='new_password', id='new_password')
+            div.form-group
+                label(for='confirm_password') Confirm password
+                input(type='password', class='form-control', name='confirm_password', id='confirm_password')
+            button(class="btn btn-default", type="submit") Change password
