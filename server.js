@@ -16,7 +16,7 @@ var mongoStore = require('connect-mongo')(session);
 var port = process.env.PORT || 3000;
 var app = express();
 
-var dbUrl = 'mongodb://localhost/a4';
+var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a4';
 mongoose.connect(dbUrl);
 
 // models loading
