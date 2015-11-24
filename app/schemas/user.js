@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
-
 
 var UserSchema = new Schema({
 	email:{
@@ -50,15 +47,6 @@ UserSchema.pre('save',function(next){
 	var user = this;
 	if(this.isNew){
 		this.meta.createAt = this.meta.updateAt = Date.now();
-
-		bcrypt.genSalt(SALT_WORK_FACTOR,function(err,salt){
-			if(err) return next(err);
-
-			bcrypt.hash(this.password,salt,function(err,hash){
-				if(err) return next(err);
-				this.password = hash;
-			});
-		});
 		this.name = this.email;
 		this.image = "gravatar.jpeg";
 	}
@@ -70,22 +58,7 @@ UserSchema.pre('save',function(next){
 
 
 UserSchema.methods = {
-	// hashPassword: function(password){
-	// 	bcrypt.genSalt(SALT_WORK_FACTOR,function(err,salt){
-	// 		bcrypt.hash(this.password,salt,function(err,hash){
-	// 			//if(err) return next(err);
-	// 			this.password = hash;
-	// 			//next();
-	// 		});
-	// 	});
-	// },
 	comparePassword : function(password,cb){
-
-		// bcrypt.compare(password,this.password,function(err,isMatch){
-		// 	if(err) return cb(err);
-		//
-		// 	cb(null,isMatch);
-		// });
 		if(password == this.password){
 			cb(null,true)
 		}

@@ -1,5 +1,8 @@
 var Index = require('../app/controllers/index');
 var User = require('../app/controllers/user');
+var Subject = require('../app/controllers/subject');
+var Textbook = require('../app/controllers/textbook');
+var Comment = require('../app/controllers/comment');
 
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
@@ -11,10 +14,11 @@ module.exports = function(app){
 		next();
 	});
 
-
-	// index page
+  // index page
 	app.get('/',Index.index);
+  app.get('/subject',Index.search);
 
+//section of user ==============================================================
 	// signup
 	app.get('/signup',User.showSignup);
 	app.post('/user/signup',User.signup);
@@ -24,6 +28,10 @@ module.exports = function(app){
 	// logout
 	app.get('/logout',User.logout);
 
+	/*
+	User.signinRequired
+	User.adminRequired
+	 */
 	app.post('/user/saveprofile',multipartMiddleware,User.signinRequired,User.saveImage, User.save);
 	//app.get('/changepassword',User.signinRequired,User.showchange)
 	app.post('/user/changepassword',multipartMiddleware,User.signinRequired,User.changepwd);
@@ -38,8 +46,30 @@ module.exports = function(app){
 	app.delete('/admin/user/list',User.del);
 	app.put('/admin/user/profile',User.makeAdmin);
 
-	/*
-	User.signinRequired
-	User.adminRequired 
-	 */
+
+//section of subject ==========================================================
+   app.get('/admin/subject/new',Subject.new);
+	 app.post('/admin/subject',Subject.save);
+	 app.get('/admin/subject/list',Subject.list);
+	 app.delete('/admin/subject/list',Subject.del);
+
+
+//section of textbook==========================================================
+app.get('/regular/textbook/new', Textbook.new);
+app.get('/regular/textbook/update/:id',Textbook.update);
+app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
+app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
+app.get('/regular/textbook/list',Textbook.list);
+
+app.get('/textbook/:id',Textbook.detail);
+
+app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
+app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
+app.delete('/admin/textbook/list',Textbook.del);
+
+
+//section of comment===========================================================
+app.post('/admin/comment',User.signinRequired,Comment.save);
+app.delete('/textbook/:id',Comment.del);
+
 };

@@ -1,5 +1,5 @@
 {
-  "name": "a4",
+  "name": "nodejs_textbook",
   "version": "0.1.0",
   "description": "NodeJs express Mongodb Mongoose bower jquery jade bootstrap",
   "main": "server.js",
@@ -7,7 +7,6 @@
     "test": "test"
   },
   "dependencies": {
-    "bcrypt": "^0.8.5",
     "body-parser": "^1.14.0",
     "connect-mongo": "^0.8.2",
     "connect-multiparty": "^2.0.0",

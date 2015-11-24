@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .panel.panel-default
+        .panel-heading
+          h3 #{keyword}
+        .panel-body
+          if textbooks && textbooks.length > 0
+            each item in textbooks
+              .col-md-2
+                .thumbnail
+                  a(href="/textbook/#{item._id}")
+                    img(src="/upload_textbook/#{item.photo}", alt="#{item.title}")
+                  .caption
+                    h4 #{item.title}
+                    p: a.btn.btn-primary(href="/textbook/#{item._id}", role="button") See detail
+      ul.pagination
+        - for (var i = 0; i < totalPage; i++) {
+          - if (currentPage == (i + 1)) {
+              li.active
+                span #{currentPage}
+          - }
+          - else {
+              li
+                a(href='/results?#{query}&p=#{i}') #{i + 1}
+          - }
+        - }

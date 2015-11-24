@@ -1,20 +1,14 @@
 .navTop
   .container-fluid
     .navbar-header.clearfix
+    a.navbar-brand(href="/")
+      img(src="/images/fullpage/logo.jpg" alt="fullpageImg", style="width:50px;height:50px;")
     if sessionuser
-      if sessionuser.role <= 10
-        a.navbar-brand(href='/regular/user/list') 
-          img(src="/images/fullpage/logo.jpg" alt="fullpageImg", style="width:50px;height:50px;")
-      else
-        a.navbar-brand(href="/admin/user/list")
-          img(src="/images/fullpage/logo.jpg" alt="fullpageImg", style="width:50px;height:50px;")
       p.navbar-text.navbar-right
         a: span Welcome:#{sessionuser.name}
         span &nbsp;|&nbsp;
         a.navbar-link(href="/logout") Log Out
     else
-      a.navbar-brand(href="/")
-        img(src="/images/fullpage/logo.jpg" alt="fullpageImg", style="width:50px;height:50px;")
       p.navbar-text.navbar-right
         a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") Sign Up
         span &nbsp;|&nbsp;
@@ -56,10 +50,13 @@
           button.btn.btn-success(type="submit") Log In
 .nav
   .navWrap.clearfix
-    if sessionuser
-      if sessionuser.role > 10
-        h1 WELCOME Administrator!
-      else
-        h1 WELCOME User!
-    else
-      h1 WELCOME TO THE CURD APP!
+    .navLogo
+      a(target="_blank", href="/regular/textbook/new") I want to sell my textbook
+    .navSearch     
+      form(method='GET', action='/subject')
+        input(type='text', name='q' placeholder="Search Textbook")
+        span
+          button.btn.btn-default(type='submit') Search 
+      
+        
+    

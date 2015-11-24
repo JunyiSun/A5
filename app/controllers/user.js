@@ -2,8 +2,6 @@ var User = require('../models/user');
 var underscore = require('underscore');
 var fs = require('fs');
 var path = require('path');
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
 var device = require('express-device');
 var requestIp = require('request-ip');
 
@@ -18,6 +16,7 @@ exports.signup = function(req,res){
 	   req.connection.remoteAddress ||
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
+
 	User.findOne({email:_user.email},function(err,user){
 		if(err){
 			console.log(err);
@@ -40,7 +39,7 @@ exports.signup = function(req,res){
 							if(err){
 								console.log(err);
 							}
-							req.session.user = user;   //save current user to session
+							req.session.user = user;   //save current admin user to session
 							return res.json({data:1});
 						})
 					}
@@ -52,7 +51,7 @@ exports.signup = function(req,res){
 							if(err){
 								console.log(err);
 							}
-							req.session.user = user;   //save current user to session
+							req.session.user = user;   //save current regular user to session
 							return res.json({data:2});
 						})
 					}
@@ -244,7 +243,7 @@ exports.regularProfile = function(req,res){
 				res.render('userprofile_regular',{
 					title:'Profile',
 					sessionuser: suser,
-					user:user,
+					user:user
 				});
 		});
 };
@@ -291,7 +290,7 @@ exports.adminProfile = function(req, res){
 				res.render('userprofile_admin',{
 					title:'Profile',
 				  sessionuser: suser,
-					user:user,
+					user:user
 				});
 		});
 };

@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Subject
+            th Time
+            //-th View
+            th Delete
+        tbody
+          each item in subjects
+            tr(class="item-id-#{item._id}")
+              td #{item.name}
+              td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
+              //-td: a(target="_blank", href="../subject/#{item._id}") View
+              td
+                button.btn.btn-danger.subjectDel(type="button", data-id="#{item._id}") Delete
+  script(src="/js/list.js")

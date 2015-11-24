@@ -7,8 +7,6 @@ var fs = require('fs');
 var _ = require('underscore');
 var device = require('express-device');
 var requestIp = require('request-ip');
-
-
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
@@ -16,7 +14,7 @@ var mongoStore = require('connect-mongo')(session);
 var port = process.env.PORT || 3000;
 var app = express();
 
-var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a4';
+var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a5';
 mongoose.connect(dbUrl);
 
 // models loading

@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Subject
+            th Title
+            th Author
+            th Location
+            th Edition
+            th Last Update
+            th pv
+            th View
+            th Edit
+            th Delete
+        tbody  
+        //- need to show only textbooks that the regular user posted
+          each item in textbooks               
+            tr(class="item-id-#{item._id}")
+              td #{item.subject.name}
+              td #{item.title}
+              td #{item.author}
+              td #{item.location}
+              td #{item.edition}
+              td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
+              td #{item.pv}
+              td: a(target="_blank", href="/textbook/#{item._id}") View
+              td: a(target="_blank", href="/admin/textbook/update/#{item._id}") Edit
+              td
+                button.btn.btn-danger.textbookDel(type="button", data-id="#{item._id}") Delete
+  script(src="/js/list.js")       
