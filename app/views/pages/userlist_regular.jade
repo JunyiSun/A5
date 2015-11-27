@@ -16,5 +16,5 @@ block content
               td #{item.email}
               td #{item.name}        
               td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
-              td: a(target="_blank", href="/regular/user/profile/#{item._id}") View
+              td: a(href="/regular/user/profile/#{item._id}") View
   script(src="/js/list.js")    

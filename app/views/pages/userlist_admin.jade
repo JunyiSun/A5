@@ -23,7 +23,7 @@ block content
               td #{item.pv}
               td #{item.devices}
               td #{item.ip}            
-              td: a(target="_blank", href="/admin/user/profile/#{item._id}") View
+              td: a(href="/admin/user/profile/#{item._id}") View
               td
                 if sessionuser.email != item.email
                   if item.role <= 10
