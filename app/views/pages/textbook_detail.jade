@@ -21,7 +21,8 @@ block content
           dt Textbook Photo
           dd
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
-        p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+        if user
+          p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
         .panel.panel-default
           .panel-heading
             h3 COMMENTS

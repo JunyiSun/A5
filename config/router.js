@@ -75,7 +75,8 @@ module.exports = function(app){
 
 //trade requests
     app.get('/traderequest/new/:id', TradeRequest.new);
-    app.get('/traderequest/make/', TradeRequest.make)
-    app.get('/traderequest/list', TradeRequest.list)
-    app.delete('/traderequest/list', TradeRequest.del)
+    app.get('/traderequest/make/', TradeRequest.make);
+    app.get('/traderequest/list', TradeRequest.list);
+    app.delete('/traderequest/list/complete', TradeRequest.complete);
+    app.delete('/traderequest/list/reject', TradeRequest.reject);
 };
