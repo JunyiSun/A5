@@ -4,6 +4,7 @@ var CommentTextbook = require('../models/comment');
 var underscore = require('underscore');   //该模块用来对变化字段进行更新
 var fs = require('fs');						//读写文件模块
 var path = require('path');					//路径模块
+var View = require('../models/view');
 
 exports.detail = function(req,res){
 	var suser = req.session.user;
@@ -21,6 +22,36 @@ exports.detail = function(req,res){
 			.populate('reply.from','name image')//查找评论人和回复人的名字
 			.populate('reply.to','name')
 			.exec(function(err,comments){
+				// Record view of textbook by user
+				View.findOne({'textbook': textbook, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.textbook = textbook;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
+				// Record view of subject by user
+				View.findOne({'subject': textbook.subject, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.subject = textbook.subject;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
 				res.render('textbook_detail',{
 					title:'Detail',
 					sessionuser: suser,
