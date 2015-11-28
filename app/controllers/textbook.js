@@ -63,12 +63,12 @@ exports.detail = function(req,res){
 };
 
 exports.new = function(req,res){
-  var suser = req.session.user;
+    var suser = req.session.user;
 	Subject.find({},function(err,subjects){
 		res.render('textbook_new',{
 			title:'Create Textbook Page',
 			subjects:subjects,
-      sessionuser: suser,
+            sessionuser: suser,
 			textbook:{}
 		});
 	});
@@ -98,7 +98,7 @@ exports.savePhoto = function(req, res, next){
 	}
 };
 
-exports.submit = function(req,res){
+exports.submit = function(req, res){
 	var id = req.body.textbook._id;
 	var textbookObj = req.body.textbook;
 	var _textbook;
@@ -121,6 +121,7 @@ exports.submit = function(req,res){
 				});
 			}
 			else{
+                textbookObj.userId = req.session.user._id;
 				_textbook = new Textbook(textbookObj);
 				var subjectId = textbookObj.subject;
 				var subjectName = textbookObj.subjectName;
@@ -200,19 +201,40 @@ exports.update = function(req,res){
 };
 
 exports.list = function(req,res){
-  var suser = req.session.user;
-	Textbook.find({})
-		.populate('subject','name')
-		.exec(function(err,textbooks){
-			if(err){
-				console.log(err);
-			}
-			res.render('textbook_list_admin',{
-				title:'Textbook List',
-        sessionuser: suser,
-				textbooks:textbooks
-			});
-		});
+    var suser = req.session.user;
+    var role = req.session.user.role;
+    if (role > 10){
+        Textbook.find({})
+            .populate('subject','name')
+            .exec(function(err,textbooks){
+                console.log("ADMIN TEST: ");
+                console.log(textbooks);
+                if(err){
+                    console.log(err);
+                }
+                res.render('textbook_list_admin',{
+                    title:'Textbook List',
+                    sessionuser: suser,
+                    textbooks:textbooks
+                });
+            });
+    }else{
+        Textbook.find({userId: suser._id})
+            .populate('subject','name')
+            .exec(function (err, textbooks){
+                console.log("REGULAR TEST: ");
+                console.log(textbooks);
+                if(err){
+                    console.log(err);
+                }
+                res.render('textbook_list_regular',{
+                    title:'Textbook List',
+                    sessionuser: suser,
+                    textbooks: textbooks
+                });
+            });
+            
+    }
 };
 
 exports.del = function(req,res){

@@ -29,7 +29,7 @@ block content
           if sessionuser.email == user.email || user.role <=10
             dt Edit
             dd 
-              a(target="_blank", href="/admin/user/edit/#{user._id}") Edit
+              a(href="/admin/user/edit/#{user._id}") Edit
           if sessionuser.role == 20
             if user.role <20
               if user.role <= 10

@@ -17,8 +17,7 @@ block content
             th Edit
             th Delete
         tbody  
-        //- need to show only textbooks that the regular user posted
-          each item in textbooks               
+          each item in textbooks
             tr(class="item-id-#{item._id}")
               td #{item.subject.name}
               td #{item.title}
@@ -27,8 +26,8 @@ block content
               td #{item.edition}
               td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
               td #{item.pv}
-              td: a(target="_blank", href="/textbook/#{item._id}") View
-              td: a(target="_blank", href="/admin/textbook/update/#{item._id}") Edit
+              td: a(href="/textbook/#{item._id}") View
+              td: a(href="/regular/textbook/update/#{item._id}") Edit
               td
                 button.btn.btn-danger.textbookDel(type="button", data-id="#{item._id}") Delete
   script(src="/js/list.js")       

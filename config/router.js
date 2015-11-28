@@ -16,7 +16,7 @@ module.exports = function(app){
 
   // index page
 	app.get('/',Index.index);
-  app.get('/subject',Index.search);
+    app.get('/subject',Index.search);
 
 //section of user ==============================================================
 	// signup
@@ -36,7 +36,7 @@ module.exports = function(app){
 	//app.get('/changepassword',User.signinRequired,User.showchange)
 	app.post('/user/changepassword',multipartMiddleware,User.signinRequired,User.changepwd);
 
-  app.get('/regular/user/list',User.signinRequired,User.regularList);
+    app.get('/regular/user/list',User.signinRequired,User.regularList);
 	app.get('/regular/user/profile/:id',User.signinRequired,User.regularProfile);
 	app.get('/regular/user/edit/:id',User.signinRequired,User.regularEdit);
 
@@ -48,28 +48,28 @@ module.exports = function(app){
 
 
 //section of subject ==========================================================
-   app.get('/admin/subject/new',Subject.new);
-	 app.post('/admin/subject',Subject.save);
-	 app.get('/admin/subject/list',Subject.list);
-	 app.delete('/admin/subject/list',Subject.del);
+    app.get('/admin/subject/new',Subject.new);
+	app.post('/admin/subject',Subject.save);
+	app.get('/admin/subject/list',Subject.list);
+	app.delete('/admin/subject/list',Subject.del);
 
 
 //section of textbook==========================================================
-app.get('/regular/textbook/new', Textbook.new);
-app.get('/regular/textbook/update/:id',Textbook.update);
-app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
-app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
-app.get('/regular/textbook/list',Textbook.list);
+    app.get('/regular/textbook/new', Textbook.new);
+    app.get('/regular/textbook/update/:id',Textbook.update);
+    app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
+    app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
+    app.get('/regular/textbook/list',Textbook.list);
 
-app.get('/textbook/:id',Textbook.detail);
+    app.get('/textbook/:id',Textbook.detail);
 
-app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
-app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
-app.delete('/admin/textbook/list',Textbook.del);
+    app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
+    app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
+    app.delete('/admin/textbook/list',Textbook.del);
 
 
 //section of comment===========================================================
-app.post('/admin/comment',User.signinRequired,Comment.save);
-app.delete('/textbook/:id',Comment.del);
+    app.post('/admin/comment',User.signinRequired,Comment.save);
+    app.delete('/textbook/:id',Comment.del);
 
 };
