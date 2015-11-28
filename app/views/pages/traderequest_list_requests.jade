@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Trade Requests
+            th Options
+        tbody
+          each item in traderequests
+            tr(class="item-id-#{item._id}")
+              td #{item.name}
+              td
+                button.btn.btn-danger.traderequestCompl(type="button", data-id="#{item._id}") Complete Request
+                button.btn.btn-danger.traderequestDel(type="button", data-id="#{item._id}") Delete Request
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Pending Trade Requests
+        tbody
+          each item in pending_traderequests
+            tr(class="item-id-#{item._id}")
+              td #{item.name}
+  script(src="/js/list.js")

@@ -7,6 +7,7 @@ var TradeRequestSchema = new Schema({
     textbookId: String,
     offerUserId: String,
     offerTextbookId: String,
+    name: String,
     meta: {
         createAt: {
     	type: Date,

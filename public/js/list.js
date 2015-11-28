@@ -60,4 +60,34 @@ $(function(){
 		});
 	});
     
+    $('.traderequestDel').click(function(e){
+        var target = $(e.target);
+        var id = target.data('id');
+		var tr = $('.item-id-' + id);
+        $.ajax({
+			type : 'DELETE',
+			url : '/traderequest/list?id=' + id
+		})
+        .done(function(res){
+            if (res.success === 1 && tr){
+                tr.remove();
+            }
+        });
+    });
+    
+    $('.traderequestCompl').click(function(e){
+        var target = $(e.target);
+        var id = target.data('id');
+		var tr = $('.item-id-' + id);
+        $.ajax({
+			type : 'DELETE',
+			url : '/traderequest/list?id=' + id
+		})
+        .done(function(res){
+            if (res.success === 1 && tr){
+                tr.remove();
+            }
+        });
+    });
+    
 });

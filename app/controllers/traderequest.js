@@ -40,14 +40,21 @@ exports.make = function(req, res){
         if (err){
             console.log ("Requested textbook does not exist");
         }else{
-            trObj.userId = txt.userId;
-            trObj.textbookId = requested_txtbk_id;
-            trObj.offerUserId = suser._id;
-            trObj.offerTextbookId = offered_txtbk_id;
-            _traderequest = new TradeRequest(trObj);
-            _traderequest.save(function (err, tr){
-                if (err) console.log(err);
-                res.redirect('/'); //CHANGE TO THE REQUESTS PAGE LATER
+            Textbook.findById(offered_txtbk_id, function(err, otxt){
+                if (err){
+                    console.log ("Offered textbook does not exist");
+                }else{
+                    trObj.name = txt.title + " for " + otxt.title;
+                    trObj.userId = txt.userId;
+                    trObj.textbookId = requested_txtbk_id;
+                    trObj.offerUserId = suser._id;
+                    trObj.offerTextbookId = offered_txtbk_id;
+                    _traderequest = new TradeRequest(trObj);
+                    _traderequest.save(function (err, tr){
+                        if (err) console.log(err);
+                        res.redirect('/'); //CHANGE TO THE REQUESTS PAGE LATER
+                    });
+                }
             });
         }
     });
@@ -56,20 +63,34 @@ exports.make = function(req, res){
     
 };
 
-//Nope
-exports.checkTR = function (req, res){
+exports.list = function(req, res){
     var suser = req.session.user;
-    var _id = req.params.id;
-    console.log("got it");
-    TradeRequest.find({userId: _id}, function (err, trs){
-        console.log(trs);
-        if (trs.length > 0){
-            res.send(true);
-        }else{
-            res.send(false);
-        }
+    TradeRequest.find({userId: suser._id}).exec(function (err, trs){
+        if (err) console.log(err);
+        TradeRequest.find({offerUserId: suser._id}).exec(function (err, ptrs){
+            if (err) console.log(err);
+            res.render('traderequest_list_requests', {
+                title: 'Trade Requests',
+                sessionuser: suser,
+                traderequests: trs,
+                pending_traderequests: ptrs
+            });
+        });
+        
     });
+    
+};
+
+exports.del = function(req, res){
+    var id  = req.query.id;
+	if(id){
+        TradeRequest.remove({_id:id},function(err,textbook){
+			if(err){
+				console.log(err);
+			}
+			res.json({success:1});
+		});
+    }
 };
 
 //exports.del
-//exports.list
