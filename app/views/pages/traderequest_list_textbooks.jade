@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th Subject
+            th Title
+            th Author
+            th Location
+            th Edition
+            th Last Update
+            th pv
+            th View
+            th 
+        tbody  
+          each item in textbooks
+            tr(class="item-id-#{item._id}")
+              td #{item.subject.name}
+              td #{item.title}
+              td #{item.author}
+              td #{item.location}
+              td #{item.edition}
+              td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
+              td #{item.pv}
+              td: a(href="/textbook/#{item._id}") View
+              td
+                a.btn.btn-primary(href="/traderequest/make?rqt=#{wanted_textbook._id}&offt=#{item._id}", role="button") Choose Textbook
+ 
+  script(src="/js/list.js")       

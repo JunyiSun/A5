@@ -2,6 +2,7 @@ var Index = require('../app/controllers/index');
 var User = require('../app/controllers/user');
 var Subject = require('../app/controllers/subject');
 var Textbook = require('../app/controllers/textbook');
+var TradeRequest = require('../app/controllers/traderequest');
 var Comment = require('../app/controllers/comment');
 
 var multipart = require('connect-multiparty');
@@ -72,4 +73,8 @@ module.exports = function(app){
     app.post('/admin/comment',User.signinRequired,Comment.save);
     app.delete('/textbook/:id',Comment.del);
 
+//trade requests
+    app.get('/traderequest/new/:id', TradeRequest.new);
+    app.get('/traderequest/make/', TradeRequest.make)
+    
 };

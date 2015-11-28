@@ -1,5 +1,6 @@
 var Textbook = require('../models/textbook');       //电影数据模型
 var Subject = require('../models/subject'); //电影分类模型
+var TradeRequest = require('../models/traderequest');
 var CommentTextbook = require('../models/comment');
 var underscore = require('underscore');   //该模块用来对变化字段进行更新
 var fs = require('fs');						//读写文件模块
@@ -162,7 +163,7 @@ exports.update = function(req,res){
 			res.render('textbook_update',{
 				title:'Update Page',
 				textbook:textbook,
-        sessionuser: suser,
+                sessionuser: suser,
 				subjects:subjects
 			});
 		});
@@ -176,8 +177,6 @@ exports.list = function(req,res){
         Textbook.find({})
             .populate('subject','name')
             .exec(function(err,textbooks){
-                console.log("ADMIN TEST: ");
-                console.log(textbooks);
                 if(err){
                     console.log(err);
                 }
@@ -191,8 +190,6 @@ exports.list = function(req,res){
         Textbook.find({userId: suser._id})
             .populate('subject','name')
             .exec(function (err, textbooks){
-                console.log("REGULAR TEST: ");
-                console.log(textbooks);
                 if(err){
                     console.log(err);
                 }
@@ -210,6 +207,11 @@ exports.del = function(req,res){
 	//获取客户端Ajax发送的URL值中的id值
 	var id  = req.query.id;
 	if(id){
+        //Removing textbooks removes the related traderequests
+        TradeRequest.remove({$or:[ {textbookId: id}, {offerTextbookId: id}]}, function(err, rqs){
+            if (err) console.log(err);
+        });
+
 		//如果id存在则服务器中将该条数据删除并返回删除成功的json数据
 		Textbook.remove({_id:id},function(err,textbook){
 			if(err){

@@ -1,4 +1,6 @@
 var User = require('../models/user');
+var Textbook = require('../models/textbook');
+var TradeRequest = require('../models/traderequest');
 var underscore = require('underscore');
 var fs = require('fs');
 var path = require('path');
@@ -289,7 +291,7 @@ exports.adminProfile = function(req, res){
 	User.findById(_id,function(err,user){
 				res.render('userprofile_admin',{
 					title:'Profile',
-				  sessionuser: suser,
+                    sessionuser: suser,
 					user:user
 				});
 		});
@@ -336,7 +338,19 @@ exports.makeAdmin = function(req, res){
 //delete user account
 exports.del = function(req, res){
 	var id  = req.query.id;
+    
 	if(id){
+        
+        //Removes the user's textbooks
+        Textbook.remove({userId: id}, function(err, tbs){
+            if (err) console.log(err);
+        });
+        
+        //Removes related traderequests
+        TradeRequest.remove({$or:[ {userId: id}, {offerUserId: id}]}, function(err, rqs){
+            if (err) console.log(err);
+        });
+        
 		User.remove({_id:id},function(err,user){
 			if(err){
 				console.log(err);
