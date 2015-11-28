@@ -5,6 +5,7 @@ var underscore = require('underscore');   //该模块用来对变化字段进行
 var fs = require('fs');						//读写文件模块
 var path = require('path');					//路径模块
 var View = require('../models/view');
+var async = require('async');
 
 exports.detail = function(req,res){
 	var suser = req.session.user;
@@ -52,11 +53,70 @@ exports.detail = function(req,res){
 					}
 				});
 
-				res.render('textbook_detail',{
-					title:'Detail',
-					sessionuser: suser,
-					comments: comments,
-					textbook:textbook
+				var recommended = [];
+				Textbook.find({subject: textbook.subject, _id: {$ne: textbook}})
+				.limit(5)
+				.exec(function(err, textbooks) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						// Store ranking info in 'rankings' with each ranking represented as an array with the textbook as the first element and the weight as the second value
+						var rankings = [];
+						textbooks.forEach(function(result) {
+							rankings.push([result, 0]);
+						});
+
+						// Prepare weight calculation tasks
+						var weighingTasks = []
+						rankings.forEach(function(pair) {
+							weighingTasks.push(function(callback) {
+								var textbook = pair[0];
+
+								// Look for views of the textbook and of the subject of the textbook by the user
+								View.find()
+								.and([
+									{ $or: [ { subject: textbook.subject }, { textbook: textbook } ] },
+									{ user: suser },
+								])
+								.exec(function (err, viewResults) {
+									if (err) {
+										console.log(err);
+									}
+									else {
+										// Weight of the result should be the total number of views for the textbook and its subject by the user
+										pair[1] += viewResults.reduce(function(previousView, currentView, currentIndex, array) {
+											return previousView.views + currentView.views;
+										});
+									}
+									callback()
+								});
+							});
+						});
+
+						// Run tasks to calculate weighting
+						async.parallel(weighingTasks, function() {
+							// This is run after the weighting is complete
+
+							// Rank result by weight, in descending order (heaviest first)
+							rankings.sort(function(first, second) {
+								return second[1] - first[1];
+							});
+
+							// Get ordered array of textbooks from ranking info
+							var rankedItems = rankings.map(function(pair) {
+								return pair[0];
+							});
+
+							res.render('textbook_detail', {
+								title:'Detail',
+								sessionuser: suser,
+								comments: comments,
+								textbook: textbook,
+								recommended: rankedItems,
+							});
+						});
+					}
 				});
 			})
 		});
