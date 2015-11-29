@@ -35,6 +35,7 @@ exports.signup = function(req,res){
 					if (!userObj){
 						user = new User(_user);
 						user.role = 20;
+						user.password = user.generateHash(password);
 						user.devices = dev;
 						user.ip = getip;
 						user.save(function(err,user){
@@ -47,6 +48,7 @@ exports.signup = function(req,res){
 					}
 					else{
 						user = new User(_user);
+						user.password = user.generateHash(password);
 						user.devices = dev;
 						user.ip = getip;
 						user.save(function(err,user){
@@ -88,25 +90,22 @@ exports.signin = function(req,res){
 			return res.json({data:0});
 		}
 		//compare password
-		user.comparePassword(password,function(err,isMatch){
-			if(err){
-				console.log(err);
-			}
-			if(isMatch){
-				req.session.user = user;   //save current user to session
-				var _curr = req.session.user;
-				if(_curr.role <= 10){
-					return res.json({data:2});
-				}
-				else{
-					return res.json({data:3});
-				}
+		isMatch = user.comparePassword(password);
+		if (isMatch){
+			req.session.user = user;   //save current user to session
+			var _curr = req.session.user;
+			if(_curr.role <= 10){
+				return res.json({data:2});
 			}
 			else{
-				//Password does not match
-				return res.json({data:1});
+				return res.json({data:3});
 			}
-		});
+		}
+		else{
+			//Password does not match
+			return res.json({data:1});
+		}
+
 	});
 };
 
@@ -192,28 +191,25 @@ exports.changepwd = function(req,res){
 			console.log('Account Does Not Exist');
 			return res.json({data:0});
 		}
-		user.comparePassword(password,function(err,isMatch){
-			if(err){
-				console.log(err);
-			}
-			if(isMatch){
-				if(newpwd == confirmpwd){
-					User.update({email:email},{$set:{password:newpwd}},function(err){
-			 			if(err){
-			 				console.log(err);
-			 			}
-			 		});
-					res.redirect('/');
-				}
-		 		else{
-					return res.json({data:2});
-				}
+		isMatch2 = user.comparePassword(password);
+		if (isMatch2){
+			if(newpwd == confirmpwd){
+				newpwd = user.generateHash(newpwd);
+				User.update({email:email},{$set:{password:newpwd}},function(err){
+					if(err){
+						console.log(err);
+					}
+				});
+				res.redirect('/');
 			}
 			else{
-					//Does not match
-				return res.json({data:1});
+				return res.json({data:2});
 			}
-		})
+		}
+		else{
+			//Does not match
+		  return res.json({data:1});
+		}
 	})
 }
 
