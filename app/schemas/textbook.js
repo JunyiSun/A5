@@ -28,7 +28,11 @@ var TextbookSchema = new Schema({
             type: Date,
             default: Date.now()
         }
-    }
+    },
+    rating:{
+	type:Number,
+	default:100
+	}
 });
 
 //模式保存前执行下面函数,如果当前数据是新创建，则创建时间和更新时间都是当前时间，否则更新时间是当前时间
