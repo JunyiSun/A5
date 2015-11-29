@@ -19,7 +19,10 @@ block content
         tbody
           each item in textbooks
             tr(class="item-id-#{item._id}")
-              td #{item.subject.name}
+              if item.subject
+                td #{item.subject.name}
+              else 
+                td N/A
               td #{item.title}
               td #{item.author}
               td #{item.location}

@@ -3,7 +3,7 @@ extends ../layout
 block content
   .container
     .row
-      img(src="/upload/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+      img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
       form.form-horizontal(method="post", action="/user/saveprofile",enctype="multipart/form-data")
         if user._id
           input(type="hidden", name="user[_id]", value=user._id)

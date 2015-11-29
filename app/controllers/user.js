@@ -133,7 +133,7 @@ exports.saveImage = function(req, res, next){
 			var type = imageData.type.split('/')[1]; //get type
 			var image = timestamp + '.' + type;   //rename
 			//save to /public/upload directory
-			var newPath = path.join(__dirname,'../../','/public/upload/' + image);
+			var newPath = path.join(__dirname,'../../','/public/upload_user/' + image);
 
 			fs.writeFile(newPath,data,function(err){
 				req.image = image;
@@ -338,19 +338,19 @@ exports.makeAdmin = function(req, res){
 //delete user account
 exports.del = function(req, res){
 	var id  = req.query.id;
-    
+
 	if(id){
-        
+
         //Removes the user's textbooks
         Textbook.remove({userId: id}, function(err, tbs){
             if (err) console.log(err);
         });
-        
+
         //Removes related traderequests
         TradeRequest.remove({$or:[ {userId: id}, {offerUserId: id}]}, function(err, rqs){
             if (err) console.log(err);
         });
-        
+
 		User.remove({_id:id},function(err,user){
 			if(err){
 				console.log(err);
