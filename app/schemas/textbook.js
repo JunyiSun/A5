@@ -39,7 +39,9 @@ var TextbookSchema = new Schema({
 TextbookSchema.pre('save',function(next){
 	if(this.isNew){
 		this.meta.createAt = this.meta.updateAt = Date.now();
-		this.photo = "textbook.jpg";
+		if(this.photo === undefined){
+			this.photo = "textbook.jpg";
+		}
 	}
 	else{
 		this.meta.updateAt = Date.now();

@@ -119,6 +119,31 @@ exports.submit = function(req, res){
 							});
 						});
 					}
+					else{
+						Subject.findOne({name:'Other'},function(err,subjectObj){
+							if (err){
+								console.log(err);
+							}
+							if (!subjectObj){
+								var subject = new Subject({
+									name:'Other',
+									textbooks:[textbook._id]
+								});
+								subject.save(function(err,subject){
+									textbook.subject = subject._id;
+									textbook.save(function(err,textbook){
+										res.redirect('/textbook/' + textbook._id);
+									});
+								});
+							}
+							else{
+									subjectObj.textbooks.push(textbook._id);
+									subjectObj.save(function(err,subjectObj){
+										res.redirect('/textbook/' + textbook._id);
+									});
+							}
+	          })
+					}
 				});
 			};
 		});
@@ -199,7 +224,7 @@ exports.list = function(req,res){
                     textbooks: textbooks
                 });
             });
-            
+
     }
 };
 

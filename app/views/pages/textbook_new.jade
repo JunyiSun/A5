@@ -3,20 +3,20 @@ extends ../layout
 block content
   .container
     .row
-      form.form-horizontal(method="post", action="/regular/textbook",enctype="multipart/form-data")
+      form#NewTextbookForm.form-horizontal(method="post", action="/regular/textbook",enctype="multipart/form-data")
         .form-group
           label.col-sm-2.control-label Choose Subject
           each sub in subjects
             label.radio-inline
               if textbook._id
-                input(type="radio", name="textbook[subject]", value=sub._id, checked=sub._id.toString()==textbook.subject.toString())
+                input.subject_group(type="radio", name="textbook[subject]", value=sub._id, checked=sub._id.toString()==textbook.subject.toString())
               else
-                input(type="radio", name="textbook[subject]", value=sub._id)
+                input.subject_group(type="radio", name="textbook[subject]", value=sub._id)
               | #{sub.name}
         .form-group
           label.col-sm-2.control-label(for="inputSubject") If Not Above, Create New Subject
           .col-sm-10
-            input#inputSubject.form-control(type="text", name="textbook[subjectName]", value=textbook.subjectName)
+            input#inputSubject.form-control.subject_group(type="text", name="textbook[subjectName]", value=textbook.subjectName)
         .form-group
           label.col-sm-2.control-label(for="inputTitle") Title
           .col-sm-10
@@ -52,3 +52,4 @@ block content
         .form-group
           .col-sm-offset-2.col-sm-10
           button.btn.btn-default(type="submit") Submit
+  script(src='/js/textbook.js')
