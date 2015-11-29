@@ -1,10 +1,10 @@
-var Textbook = require('../models/textbook');       //电影数据模型
-var Subject = require('../models/subject'); //电影分类模型
+var Textbook = require('../models/textbook');
+var Subject = require('../models/subject');
 var TradeRequest = require('../models/traderequest');
 var CommentTextbook = require('../models/comment');
-var underscore = require('underscore');   //该模块用来对变化字段进行更新
-var fs = require('fs');						//读写文件模块
-var path = require('path');					//路径模块
+var underscore = require('underscore');
+var fs = require('fs');
+var path = require('path');
 
 exports.detail = function(req,res){
 	var suser = req.session.user;
@@ -15,11 +15,12 @@ exports.detail = function(req,res){
 			console.log(err);
 		}
 	});
+	//find all the comments about this textbook and display them
 	Textbook.findById(_id,function(err,textbook){
 		CommentTextbook
 			.find({textbook:_id})
 			.populate('from','name image')
-			.populate('reply.from','name image')//查找评论人和回复人的名字
+			.populate('reply.from','name image')
 			.populate('reply.to','name')
 			.exec(function(err,comments){
 				res.render('textbook_detail',{
@@ -54,7 +55,7 @@ exports.savePhoto = function(req, res, next){
 			var timestamp = Date.now();  //get time
 			var type = photoData.type.split('/')[1]; //get type
 			var photo = timestamp + '.' + type;   //rename
-			//save to /public/upload directory
+			//save to /public/upload_textbook directory
 			var newPath = path.join(__dirname,'../../','/public/upload_textbook/' + photo);
 
 			fs.writeFile(newPath,data,function(err){
@@ -72,7 +73,7 @@ exports.submit = function(req, res){
 	var id = req.body.textbook._id;
 	var textbookObj = req.body.textbook;
 	var _textbook;
-	//如果有自定义上传海报  将textbookObj中的海报地址改成自定义上传海报的地址
+	//if there is a uploaded photo, save the photo
 	if(req.photo){
 		textbookObj.photo = req.photo;
 	}
@@ -153,7 +154,7 @@ exports.save = function(req,res){
 	var id = req.body.textbook._id;
 	var textbookObj = req.body.textbook;
 	var _textbook;
-	//如果有自定义上传海报  将textbookObj中的海报地址改成自定义上传海报的地址
+	//if there is a uploaded photo, save the photo
 	if(req.photo){
 		textbookObj.photo = req.photo;
 	}
@@ -164,7 +165,7 @@ exports.save = function(req,res){
 		}
 
 		if(textbook){
-			//使用underscore模块的extend函数更新变化的字段
+			//use underscore to extend the existing info
 			_textbook = underscore.extend(textbook,textbookObj);
 			_textbook.save(function(err,textbook){
 				if(err){
@@ -229,15 +230,13 @@ exports.list = function(req,res){
 };
 
 exports.del = function(req,res){
-	//获取客户端Ajax发送的URL值中的id值
 	var id  = req.query.id;
 	if(id){
-        //Removing textbooks removes the related traderequests
-        TradeRequest.remove({$or:[ {textbookId: id}, {offerTextbookId: id}]}, function(err, rqs){
-            if (err) console.log(err);
-        });
+    //Removing textbooks removes the related traderequests
+    TradeRequest.remove({$or:[ {textbookId: id}, {offerTextbookId: id}]}, function(err, rqs){
+        if (err) console.log(err);
+    });
 
-		//如果id存在则服务器中将该条数据删除并返回删除成功的json数据
 		Textbook.remove({_id:id},function(err,textbook){
 			if(err){
 				console.log(err);

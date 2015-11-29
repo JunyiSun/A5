@@ -1,4 +1,4 @@
-var Subject = require('../models/subject');   
+var Subject = require('../models/subject');
 
 // admin new page
 exports.new = function(req, res) {
@@ -41,10 +41,8 @@ exports.list = function(req, res) {
 
 //list delete subjects
 exports.del = function(req,res){
-    //获取客户端Ajax发送的URL值中的id值
     var id  = req.query.id;
     if(id){
-        //如果id存在则服务器中将该条数据删除并返回删除成功的json数据
         Subject.remove({_id:id},function(err,subject){
             if(err){
                 console.log(err);

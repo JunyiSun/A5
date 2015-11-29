@@ -1,34 +1,33 @@
-var CommentTextbook = require('../models/comment');    //电影数据模型
+var CommentTextbook = require('../models/comment');
 
 
 exports.save = function(req,res){
 	var _comment = req.body.comment;
 	var textbookId = _comment.textbook;
-	//如果存在cid说明是对评论人进行回复
+	//if cid exist, then it is a reply to the original comment
 	if(_comment.cid){
-		//通过点击一条电影评论的id，找到这条评论的内容
 		CommentTextbook.findById(_comment.cid,function(err,comment){
 			var reply = {
-				from:_comment.from,  //回复评论人
-				to:_comment.tid,		 //回复给谁
-				content:_comment.content, //回复内容
+				from:_comment.from,
+				to:_comment.tid,
+				content:_comment.content,
 				meta: {
 			    	createAt: Date.now()
 			  	}
 			};
 			comment.reply.push(reply);
 
-			//保存该条评论的回复内容
+			//save comment
 			comment.save(function(err,comment){
 				if(err){
 					console.log(err);
 				}
-				//在数据库中保存用户评论后会生成一条该评论的_id，服务器查找该_id对应的值返回给客户端
+				//generate a new comment in database and tell front end to display it
 				CommentTextbook
 					.findOne({_id:comment._id})
-					.populate('from','name image')
-          .populate('reply.from','name image')//查找评论人和回复人的名字
-    			.populate('reply.to','name')
+					.populate('from','name image')  //search for the name and image of the user who comments
+          .populate('reply.from','name image')//search for the name and image of the user who replys to the comment
+    			.populate('reply.to','name') // search for the name of the user who is replied
 					.exec(function(err,comments){
 						res.json({data:comments});
 					});
@@ -36,18 +35,16 @@ exports.save = function(req,res){
 		});
 	}
   else{
-    //简单的评论，不是对评论内容的回复
-		//将用户评论创建新对象并保存
+    //Just a comment to the textbook
 		var comment = new CommentTextbook(_comment);
 		comment.save(function(err,comment){
 			if(err){
 				console.log(err);
 			}
-			//在数据库中保存用户评论后会生成一条该评论的_id，服务器查找该_id对应的值返回给客户端
 			CommentTextbook
 				.findOne({_id:comment._id})
 				.populate('from','name image')
-        .populate('reply.from','name image')//查找评论人和回复人的名字
+        .populate('reply.from','name image')
   			.populate('reply.to','name')
 				.exec(function(err,comments){
 					res.json({data:comments});
@@ -56,21 +53,18 @@ exports.save = function(req,res){
 	}
 };
 
-//comment delete 电影评论删除
+//comment delete
 exports.del = function(req,res){
-    //获取客户端Ajax发送的URL值中的id值
-    var cid  = req.query.cid;   //获取该评论的id值
-    var did  = req.query.did;   //获取各条回复评论的id值
+    var cid  = req.query.cid;   //get id of the comment
+    var did  = req.query.did;   //get id of all the reply of the comment
 
-    //如果点击的是叠楼中的回复评论
+    //if click the reply
     if(did !== 'undefined'){
-    	//先查找到该叠楼评论
+			//search for the reply within the comment, and delete it
     	CommentTextbook.findOne({_id:cid},function(err,comment){
-    		var len = comment.reply.length; //获取该叠楼评论中回复评论的条数
+    		var len = comment.reply.length;
 
     		for(var i=0;i<len;i++){
-    			//如果找到该叠楼中点击删除的回复评论，将其评论删除并保存数据库
-
     			if(comment.reply[i] && comment.reply[i]._id.toString() === did){
     				comment.reply.splice(i,1);
     			}
@@ -83,7 +77,7 @@ exports.del = function(req,res){
 			res.json({success:1});
     	});
     }else{
-	    //点击的是叠楼的楼主评论，即第一条评论
+	    //if click the original comment, then delete the comment and its reply
 	    CommentTextbook.remove({_id:cid},function(err,comment){
 	        if(err){
 	            console.log(err);

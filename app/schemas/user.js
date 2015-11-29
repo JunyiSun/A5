@@ -17,8 +17,6 @@ var UserSchema = new Schema({
 	geo: Object,
 	/*
 	0:nomal user
-	1:verified user
-	2:prefessional user
 	>10: admin
 	=20:super admin
 	 */
