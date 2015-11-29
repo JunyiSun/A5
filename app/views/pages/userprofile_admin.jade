@@ -23,9 +23,9 @@ block content
           dd
             if sessionuser.email == user.email || user.role <=10
               a(href="/admin/user/edit/#{user._id}")
-                img(src="/upload/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+                img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
             else
-              img(src="/upload/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+              img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
           if sessionuser.email == user.email || user.role <=10
             dt Edit
             dd 
