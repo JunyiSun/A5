@@ -56,7 +56,7 @@ module.exports = function(app){
 
 
 //section of textbook==========================================================
-    app.get('/regular/textbook/new', Textbook.new);
+    app.get('/regular/textbook/new', User.signinRequired, Textbook.new);
     app.get('/regular/textbook/update/:id',Textbook.update);
     app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
     app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
