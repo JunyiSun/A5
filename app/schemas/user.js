@@ -21,6 +21,7 @@ var UserSchema = new Schema({
 	devices: String,
 	ip: String,
 	geo: Object,
+	messages: [{type: ObjectId, ref: 'Message'}],
 	/*
 	0:nomal user
 	>10: admin

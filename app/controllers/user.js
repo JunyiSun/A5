@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Textbook = require('../models/textbook');
 var TradeRequest = require('../models/traderequest');
+var ChatWith = require('../models/chat');
 var underscore = require('underscore');
 var fs = require('fs');
 var path = require('path');
@@ -238,12 +239,20 @@ exports.regularProfile = function(req,res){
 		}
 	});
 	User.findById(_id,function(err,user){
-				res.render('userprofile_regular',{
-					title:'Profile',
-					sessionuser: suser,
-					user:user
-				});
-		});
+		ChatWith
+		.find({with:_id})
+		.populate('from','name image')
+		.populate('reply.from','name image')
+		.populate('reply.to','name')
+		.exec(function(err,chats){
+			res.render('userprofile_regular',{
+				title:'Profile',
+				sessionuser: suser,
+				messages:chats,
+				user:user
+			});
+		})
+	});
 };
 
 exports.regularEdit = function(req,res){
@@ -285,12 +294,20 @@ exports.adminProfile = function(req, res){
 		}
 	});
 	User.findById(_id,function(err,user){
-				res.render('userprofile_admin',{
-					title:'Profile',
-                    sessionuser: suser,
-					user:user
-				});
-		});
+		ChatWith
+		.find({with:_id})
+		.populate('from','name image')
+		.populate('reply.from','name image')
+		.populate('reply.to','name')
+		.exec(function(err,chats){
+			res.render('userprofile_admin',{
+				title:'Profile',
+				sessionuser: suser,
+				messages: chats,
+				user:user
+			});
+		})
+	});
 };
 
 exports.adminEdit = function(req, res){

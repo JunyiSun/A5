@@ -25,6 +25,10 @@ block content
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
         if user
             p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+            if sessionuser.role > 10
+              p: a.btn.btn-primary(href="/admin/user/profile/#{textbook.userId}", role="button") Contact the Seller
+            else
+              p: a.btn.btn-primary(href="/regular/user/profile/#{textbook.userId}", role="button") Contact the Seller
         if recommended.length > 0
             br
             .container
