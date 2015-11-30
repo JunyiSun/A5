@@ -9,7 +9,12 @@ var UserSchema = new Schema({
 		type:String
 	},
 	password:String,
-	newpassword: String,
+	google:{
+		id: String,
+		token: String,
+		email: String,
+		name: String
+	},
 	name: String,
 	description: String,
 	image: String,

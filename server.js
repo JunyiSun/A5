@@ -10,6 +10,7 @@ var requestIp = require('request-ip');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
 var port = process.env.PORT || 3000;
 var app = express();
@@ -61,6 +62,8 @@ app.use(session({
 
 app.set('view options', { layout: false });
 app.use(device.capture());
+app.use(passport.initialize());
+app.use(passport.session());
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -72,8 +75,8 @@ if ('development' === env) {
 	mongoose.set('debug',true);
 }
 
-
-require('./config/router')(app);
+require('./config/passport')(app, passport);
+require('./config/router')(app, passport);
 
 app.listen(port);	//starts here!!!
 
