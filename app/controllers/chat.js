@@ -1,12 +1,12 @@
-var ChatTextbook = require('../models/chat');
+var ChatWith = require('../models/chat');
 
 
 exports.save = function(req,res){
 	var _chat = req.body.chat;
-	var textbookId = _chat.textbook;
+	var withId = _chat.with;
 	//if cid exist, then it is a reply to the original chat
 	if(_chat.cid){
-		ChatTextbook.findById(_chat.cid,function(err,chat){
+		ChatWith.findById(_chat.cid,function(err,chat){
 			var reply = {
 				from:_chat.from,
 				to:_chat.tid,
@@ -23,7 +23,7 @@ exports.save = function(req,res){
 					console.log(err);
 				}
 				//generate a new chat in database and tell front end to display it
-				ChatTextbook
+				ChatWith
 					.findOne({_id:chat._id})
 					.populate('from','name image')  //search for the name and image of the user who chats
           .populate('reply.from','name image')//search for the name and image of the user who replys to the chat
@@ -35,13 +35,13 @@ exports.save = function(req,res){
 		});
 	}
   else{
-    //Just a chat to the textbook
-		var chat = new ChatTextbook(_chat);
+    //Just a new message
+		var chat = new ChatWith(_chat);
 		chat.save(function(err,chat){
 			if(err){
 				console.log(err);
 			}
-			ChatTextbook
+			ChatWith
 				.findOne({_id:chat._id})
 				.populate('from','name image')
         .populate('reply.from','name image')
@@ -61,7 +61,7 @@ exports.del = function(req,res){
     //if click the reply
     if(did !== 'undefined'){
 			//search for the reply within the chat, and delete it
-    	ChatTextbook.findOne({_id:cid},function(err,chat){
+    	ChatWith.findOne({_id:cid},function(err,chat){
     		var len = chat.reply.length;
 
     		for(var i=0;i<len;i++){
@@ -78,7 +78,7 @@ exports.del = function(req,res){
     	});
     }else{
 	    //if click the original chat, then delete the chat and its reply
-	    ChatTextbook.remove({_id:cid},function(err,chat){
+	    ChatWith.remove({_id:cid},function(err,chat){
 	        if(err){
 	            console.log(err);
 	        }

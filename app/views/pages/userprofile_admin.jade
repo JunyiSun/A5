@@ -4,7 +4,7 @@ block link
 block content
   .container
     .row
-      .col-md-5
+      .col-md-8
         .dl-horizontal
           dt Email
           dd= user.email
@@ -40,4 +40,47 @@ block content
                 dt Revoke Administrator
                 dd
                   button.btn.btn-primary.userAdmin(type="button", data-id="#{user._id}",class="user-id-#{user._id}") Revoke Administrator
+        hr
+        .panel.panel-success
+          .panel-heading
+            h3 Send Messages
+          .panel-body
+            ul.media-list#mediaList
+              each item in messages
+                if item.from.name == sessionuser.name || sessionuser._id == user._id
+                  li.media
+                    .pull-left
+                      img.media-object(src="/upload_user/#{item.from.image}", style="width: 40px; height: 40px;")
+                    .media-body
+                      h4.media-heading #{item.from.name}   
+                      p #{item.content}
+                      span.createAt #{moment(item.meta.createAt).format('MM-DD HH:mm')} &nbsp;&nbsp;&nbsp;&nbsp;                  
+                      a.chat(href="/admin/user/profile/#{item.from._id}", data-cid="#{item._id}", data-tid="#{item.from._id}") REPLY
+                      
+                      if item.reply && item.reply.length > 0
+                        each reply in item.reply
+                          .media
+                            .pull-left
+                              img.media-object(src="/upload_user/#{reply.from.image}", style="width: 30px; height: 30px;")
+                            .media-body
+                              h4.media-heading
+                                | #{reply.from.name}
+                                span &nbsp;REPLY&nbsp;
+                                | #{reply.to.name}
+                              p #{reply.content}
+                              span.createAt #{moment(reply.meta.createAt).format('MM-DD HH:mm')} &nbsp;&nbsp;&nbsp;&nbsp;
+                              a.chat(href="#chats", data-cid="#{item._id}", data-tid="#{item.from._id}") REPLY
+                  hr
+            #chats  
+              form#chatForm(method="POST", action="/admin/chat")
+                input(type="hidden", name="chat[with]", value="#{user._id}")
+                if sessionuser
+                  input(type="hidden", name="chat[from]", value="#{sessionuser._id}")
+                .form-group
+                  textarea.form-control(name="chat[content]", row="3")
+                if sessionuser
+                  button.btn.btn-primary(type='submit') SUBMIT
+                else
+                  a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Please Log In To Chat 
   script(src="/js/profile.js")
+  script(src="/js/chat.js")

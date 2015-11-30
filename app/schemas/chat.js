@@ -4,12 +4,23 @@ var ObjectId = Schema.Types.ObjectId;
 
 
 var ChatSchema = new Schema({
-	textbook:{
-    type:ObjectId,
-    ref:'Textbook'},
+	with:{
+	  type:ObjectId,
+	  ref:'User'},
 	from:{
     type:ObjectId,
     ref:'User'},
+	reply:[{
+		from:{type:ObjectId,ref:'User'},
+		to:{type:ObjectId,ref:'User'},
+		content:String,
+	    meta: {
+	    	createAt: {
+		    	type: Date,
+		    	default: Date.now()
+	    	}
+	  	}
+	}],
 	content:String,
   meta: {
   	createAt: {

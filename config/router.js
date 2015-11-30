@@ -4,6 +4,7 @@ var Subject = require('../app/controllers/subject');
 var Textbook = require('../app/controllers/textbook');
 var TradeRequest = require('../app/controllers/traderequest');
 var Comment = require('../app/controllers/comment');
+var Chat = require('../app/controllers/chat');
 
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
@@ -68,7 +69,7 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
     app.get('/regular/textbook/update/:id',Textbook.update);
     app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
     app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
-    app.get('/regular/textbook/list',Textbook.list);
+    app.get('/regular/textbook/list',Textbook.mylist);
 
     app.get('/textbook/:id',Textbook.detail);
 
@@ -81,7 +82,11 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
     app.post('/admin/comment',User.signinRequired,Comment.save);
     app.delete('/textbook/:id',Comment.del);
 
-//trade requests
+//section of chat =============================================================
+    app.post('/admin/chat', Chat.save);
+		//app.delete('/regular/user/profile/:id', Chat.del);
+
+//trade requests===============================================================
     app.get('/traderequest/new/:id', TradeRequest.new);
     app.get('/traderequest/make/', TradeRequest.make);
     app.get('/traderequest/list', TradeRequest.list);

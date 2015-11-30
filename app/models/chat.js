@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
 var ChatSchema = require('../schemas/chat');
-var ChatTextbook = mongoose.model('ChatTextbook', ChatSchema);
+var ChatWith = mongoose.model('ChatWith', ChatSchema);
 
-module.exports = ChatTextbook;
+module.exports = ChatWith;

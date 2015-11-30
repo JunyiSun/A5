@@ -85,7 +85,7 @@ exports.new = function(req,res){
 		res.render('textbook_new',{
 			title:'Create Textbook Page',
 			subjects:subjects,
-            sessionuser: suser,
+      sessionuser: suser,
 			textbook:{}
 		});
 	});
@@ -128,7 +128,7 @@ exports.submit = function(req, res){
 			if(err){
 				console.log(err);
 			}
-			if(textbook){
+			if(textbook){    //if textbook already exists, update its info (redundant)
 				_textbook = underscore.extend(textbook,textbookObj);
 				_textbook.save(function(err,textbook){
 					if(err){
@@ -137,24 +137,27 @@ exports.submit = function(req, res){
 					res.redirect('/textbook/' + textbook._id);
 				});
 			}
-			else{
-                textbookObj.userId = req.session.user._id;
+			else{   //create a new textbook object
+        textbookObj.userId = req.session.user._id;              //what does this code do? Oh i see
 				_textbook = new Textbook(textbookObj);
 				var subjectId = textbookObj.subject;
 				var subjectName = textbookObj.subjectName;
 
+				_textbook.user = req.session.user;                     //add user object connected to this textbook
+
+         //save this new created textbook
 				_textbook.save(function(err,textbook){
 					if(err){
 						console.log(err);
 					}
-					if(subjectId){
+					if(subjectId){  //if user chooses a subject
 						Subject.findById(subjectId,function(err,subject){
 							subject.textbooks.push(textbook._id);
 							subject.save(function(err,subject){
 								res.redirect('/textbook/' + textbook._id);
 							});
 						});
-					}else if(subjectName){
+					}else if(subjectName){   //if the user creates a new subject
 						var subject = new Subject({
 							name:subjectName,
 							textbooks:[textbook._id]
@@ -166,7 +169,7 @@ exports.submit = function(req, res){
 							});
 						});
 					}
-					else{
+					else{   //of neither, create a subject called other and save the book
 						Subject.findOne({name:'Other'},function(err,subjectObj){
 							if (err){
 								console.log(err);
@@ -183,7 +186,7 @@ exports.submit = function(req, res){
 									});
 								});
 							}
-							else{
+							else{      //if other subject already exists, then add the book
 									subjectObj.textbooks.push(textbook._id);
 									subjectObj.save(function(err,subjectObj){
 										res.redirect('/textbook/' + textbook._id);
@@ -241,6 +244,23 @@ exports.update = function(req,res){
 		});
 	});
 };
+
+exports.mylist = function(req,res){
+	var suser = req.session.user;
+	var sessionid = req.session.user._id;
+	Textbook.find({userId:sessionid})
+			.populate('subject','name')
+			.exec(function(err,textbooks){
+					if(err){
+							console.log(err);
+					}
+					res.render('textbook_list_regular',{
+							title:'Textbook List',
+							sessionuser: suser,
+							textbooks:textbooks
+					});
+			});
+}
 
 exports.list = function(req,res){
     var suser = req.session.user;
