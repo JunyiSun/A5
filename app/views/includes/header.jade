@@ -10,6 +10,9 @@
         a.navbar-link(href="/logout") Log Out
     else
       p.navbar-text.navbar-right
+        a(href="auth/google" class="btn btn-danger")
+          span.fa.fa-google Sign in with Google
+        span &nbsp;|&nbsp;
         a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") Sign Up
         span &nbsp;|&nbsp;
         a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Log In

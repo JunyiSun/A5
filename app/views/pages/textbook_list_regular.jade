@@ -19,7 +19,10 @@ block content
         tbody  
           each item in textbooks
             tr(class="item-id-#{item._id}")
-              td #{item.subject.name}
+              if item.subject
+                td #{item.subject.name}
+              else 
+                td N/A
               td #{item.title}
               td #{item.author}
               td #{item.location}
@@ -27,7 +30,7 @@ block content
               td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
               td #{item.pv}
               td: a(href="/textbook/#{item._id}") View
-              td: a(href="/regular/textbook/update/#{item._id}") Edit
+              td: a(href="/admin/textbook/update/#{item._id}") Edit
               td
                 button.btn.btn-danger.textbookDel(type="button", data-id="#{item._id}") Delete
   script(src="/js/list.js")       
