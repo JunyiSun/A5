@@ -5,6 +5,9 @@ var CommentTextbook = require('../models/comment');
 var underscore = require('underscore');
 var fs = require('fs');
 var path = require('path');
+var View = require('../models/view');
+var async = require('async');
+var recommendations = require('../recommendations');
 
 exports.detail = function(req,res){
 	var suser = req.session.user;
@@ -23,11 +26,54 @@ exports.detail = function(req,res){
 			.populate('reply.from','name image')
 			.populate('reply.to','name')
 			.exec(function(err,comments){
-				res.render('textbook_detail',{
-					title:'Detail',
-					sessionuser: suser,
-					comments: comments,
-					textbook:textbook
+				// Record view of textbook by user
+				View.findOne({'textbook': textbook, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.textbook = textbook;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
+				// Record view of subject by user
+				View.findOne({'subject': textbook.subject, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.subject = textbook.subject;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
+				var recommended = [];
+				Textbook.find({subject: textbook.subject, _id: {$ne: textbook}})
+				.limit(5)
+				.exec(function(err, textbooks) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						recommendations.rankTextbooks(suser, textbooks, function(rankedTextbooks) {
+							res.render('textbook_detail', {
+								title:'Detail',
+								sessionuser: suser,
+								comments: comments,
+								textbook: textbook,
+								recommended: rankedTextbooks,
+							});
+						});
+					}
 				});
 			})
 		});

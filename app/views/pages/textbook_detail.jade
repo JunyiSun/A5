@@ -24,7 +24,23 @@ block content
           dd
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
         if user
-          p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+			p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+        if recommended.length > 0
+            br
+            .container
+              .row
+                  .panel.panel-default
+                      .panel-heading
+                          h3 Recommended
+                      .panel-body
+                              each item in recommended
+                                  .col-md-2
+                                      .thumbnail
+                                          a(href="/textbook/#{item._id}")
+                                          img(src="/upload_textbook/#{item.photo}", alt="#{item.title}", style="width:250px;height:250px;")
+                                      .caption
+                                          h4 #{item.title}
+                                          p: a.btn.btn-primary(href="/textbook/#{item._id}", role="button") See Detail
         .panel.panel-default
           .panel-heading
             h3 COMMENTS
