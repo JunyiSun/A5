@@ -64,7 +64,7 @@ $(function(){
 		var tr = $('.item-id-' + id);
         $.ajax({
 			type : 'DELETE',
-			url : '/traderequest/list?id=' + id
+			url : '/traderequest/list/reject?id=' + id
 		})
         .done(function(res){
             if (res.success === 1 && tr){
@@ -79,7 +79,7 @@ $(function(){
 		var tr = $('.item-id-' + id);
         $.ajax({
 			type : 'DELETE',
-			url : '/traderequest/list?id=' + id
+			url : '/traderequest/list/complete?id=' + id
 		})
         .done(function(res){
             if (res.success === 1 && tr){

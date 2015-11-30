@@ -64,7 +64,7 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
 
 
 //section of textbook==========================================================
-    app.get('/regular/textbook/new', Textbook.new);
+    app.get('/regular/textbook/new', User.signinRequired, Textbook.new);
     app.get('/regular/textbook/update/:id',Textbook.update);
     app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
     app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
@@ -83,7 +83,8 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
 
 //trade requests
     app.get('/traderequest/new/:id', TradeRequest.new);
-    app.get('/traderequest/make/', TradeRequest.make)
-    app.get('/traderequest/list', TradeRequest.list)
-    app.delete('/traderequest/list', TradeRequest.del)
+    app.get('/traderequest/make/', TradeRequest.make);
+    app.get('/traderequest/list', TradeRequest.list);
+    app.delete('/traderequest/list/complete', TradeRequest.complete);
+    app.delete('/traderequest/list/reject', TradeRequest.reject);
 };
