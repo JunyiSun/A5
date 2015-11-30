@@ -5,25 +5,6 @@ block content
   .container
     .row
       .col-md-8
-        .dl-horizontal
-          dt Title
-          dd= textbook.title
-          dt Author
-          dd= textbook.author
-          dt Edition
-          dd= textbook.edition
-          dt Language
-          dd= textbook.language
-          dt Location
-          dd= textbook.location
-          dt Summary
-          dd= textbook.summary
-          dt Rating
-          dd= textbook.rating
-          dt Textbook Photo
-          dd
-            img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
-        p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
         .panel.panel-default
           .panel-heading
             h3 COMMENTS
@@ -68,4 +49,4 @@ block content
                   button.btn.btn-primary(type='submit') SUBMIT
                 else
                   a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Please Log In To Comment
-  script(src="/js/comment.js")
+  script(src="/js/chat.js")
