@@ -5,7 +5,7 @@ var CommentTextbook = require('../models/comment');
 var underscore = require('underscore');   //该模块用来对变化字段进行更新
 var fs = require('fs');						//读写文件模块
 var path = require('path');					//路径模块
-
+console.log('here');
 exports.detail = function(req,res){
 	var suser = req.session.user;
 	var _id = req.params.id;
@@ -221,3 +221,17 @@ exports.del = function(req,res){
 		});
 	}
 };
+exports.updateRating = function(req,res){
+	var _id = req.query.id;
+  	var suser = req.session.user;
+	console.log('hey');
+	Textbook.update({_id:_id},{$inc:{rating:1}},function(err){
+					if(err){
+						console.log(err);
+					}
+					res.json({success:1});
+			  });
+
+	
+};
+
