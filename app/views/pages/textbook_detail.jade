@@ -4,7 +4,7 @@ block link
 block content
   .container
     .row
-      .col-md-5
+      .col-md-8
         .dl-horizontal
           dt Title
           dd= textbook.title
@@ -24,7 +24,28 @@ block content
           dt Textbook Photo
           dd
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
-        p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+        if user
+            p: a.btn.btn-primary(href="/traderequest/new/#{textbook.id}", role="button") Send Trade Request
+            if sessionuser.role > 10
+              p: a.btn.btn-primary(href="/admin/user/profile/#{textbook.userId}", role="button") Contact the Seller
+            else
+              p: a.btn.btn-primary(href="/regular/user/profile/#{textbook.userId}", role="button") Contact the Seller
+        if recommended.length > 0
+            br
+            .container
+              .row
+                  .panel.panel-default
+                      .panel-heading
+                          h3 Recommended
+                      .panel-body
+                              each item in recommended
+                                  .col-md-2
+                                      .thumbnail
+                                          a(href="/textbook/#{item._id}")
+                                          img(src="/upload_textbook/#{item.photo}", alt="#{item.title}", style="width:250px;height:250px;")
+                                      .caption
+                                          h4 #{item.title}
+                                          p: a.btn.btn-primary(href="/textbook/#{item._id}", role="button") See Detail
         .panel.panel-default
           .panel-heading
             h3 COMMENTS
@@ -33,7 +54,7 @@ block content
               each item in comments
                 li.media
                   .pull-left
-                    img.media-object(src="/upload/#{item.from.image}", style="width: 40px; height: 40px;")
+                    img.media-object(src="/upload_user/#{item.from.image}", style="width: 40px; height: 40px;")
                   .media-body
                     h4.media-heading #{item.from.name}   
                     p #{item.content}
@@ -46,7 +67,7 @@ block content
                       each reply in item.reply
                         .media
                           .pull-left
-                            img.media-object(src="/upload/#{reply.from.image}", style="width: 30px; height: 30px;")
+                            img.media-object(src="/upload_user/#{reply.from.image}", style="width: 30px; height: 30px;")
                           .media-body
                             h4.media-heading
                               | #{reply.from.name}

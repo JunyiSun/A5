@@ -4,18 +4,9 @@ block content
   .container
     .row
       form.form-horizontal(method="post", action="/regular/textbook/edit",enctype="multipart/form-data")
-        //- if the id exits, then use a hidden input form to store the id.
+        //- if the id exists, then use a hidden input form to store the id.
         if textbook._id
           input(type="hidden", name="textbook[_id]", value=textbook._id)
-        .form-group
-          label.col-sm-2.control-label Choose Subject
-          each sub in subjects
-            label.radio-inline
-              if textbook._id
-                input(type="radio", name="textbook[subject]", value=sub._id, checked=sub._id.toString()==textbook.subject.toString())
-              else
-                input(type="radio", name="textbook[subject]", value=sub._id)
-              | #{sub.name}
         .form-group
           label.col-sm-2.control-label(for="inputTitle") Title
           .col-sm-10

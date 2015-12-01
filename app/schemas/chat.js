@@ -3,10 +3,10 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 
-var CommentSchema = new Schema({
-	textbook:{
-    type:ObjectId,
-    ref:'Textbook'},
+var ChatSchema = new Schema({
+	with:{
+	  type:ObjectId,
+	  ref:'User'},
 	from:{
     type:ObjectId,
     ref:'User'},
@@ -35,7 +35,7 @@ var CommentSchema = new Schema({
 });
 
 
-CommentSchema.pre('save',function(next){
+ChatSchema.pre('save',function(next){
 	if(this.isNew){
 		this.meta.createAt = this.meta.updateAt = Date.now();
 	}else{
@@ -44,7 +44,7 @@ CommentSchema.pre('save',function(next){
 	next();
 });
 
-CommentSchema.statics = {
+ChatSchema.statics = {
 	fetch : function(cb){
 		return this
 			.find({})
@@ -58,4 +58,4 @@ CommentSchema.statics = {
 	}
 };
 
-module.exports = CommentSchema;
+module.exports = ChatSchema;

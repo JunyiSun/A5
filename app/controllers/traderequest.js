@@ -49,6 +49,7 @@ exports.make = function(req, res){
                     trObj.textbookId = requested_txtbk_id;
                     trObj.offerUserId = suser._id;
                     trObj.offerTextbookId = offered_txtbk_id;
+                    trObj.status = 0;
                     _traderequest = new TradeRequest(trObj);
                     _traderequest.save(function (err, tr){
                         if (err) console.log(err);
@@ -65,21 +66,54 @@ exports.make = function(req, res){
 
 exports.list = function(req, res){
     var suser = req.session.user;
-    TradeRequest.find({userId: suser._id}).exec(function (err, trs){
+    TradeRequest.find({userId: suser._id, status: 0}).exec(function (err, trs){
         if (err) console.log(err);
-        TradeRequest.find({offerUserId: suser._id}).exec(function (err, ptrs){
+        TradeRequest.find({offerUserId: suser._id, status: 0}).exec(function (err, ptrs){
             if (err) console.log(err);
-            res.render('traderequest_list_requests', {
-                title: 'Trade Requests',
-                sessionuser: suser,
-                traderequests: trs,
-                pending_traderequests: ptrs
+            TradeRequest.find({$or: [{userId: suser._id}, {offerUserId: suser._id}], $or: [{status: 1}, {status: -1}]}).exec(function (err, ctrs){
+                if (err) console.log(err);
+                res.render('traderequest_list_requests', {
+                    title: 'Trade Requests',
+                    sessionuser: suser,
+                    traderequests: trs,
+                    pending_traderequests: ptrs,
+                    complete_traderequests: ctrs
+                });
             });
         });
         
     });
     
 };
+
+exports.reject = function(req, res){
+    var id = req.query.id;
+    var n = {status: -1};
+    if (id){
+        TradeRequest.findById(id, function(err, tr){
+            if (tr){
+                tr.update(n, function (err, uptr){
+                    res.json({success: 1});
+                });
+            }
+        });
+    }
+};
+
+exports.complete = function(req, res){
+    var id = req.query.id;
+    var n = {status: 1};
+    if (id){
+        TradeRequest.findById(id, function(err, tr){
+            if (tr){
+                tr.update(n, function (err, uptr){
+                    res.json({success: 1});
+                });
+            }
+        });
+    }
+};
+
 
 exports.del = function(req, res){
     var id  = req.query.id;
@@ -93,4 +127,3 @@ exports.del = function(req, res){
     }
 };
 
-//exports.del

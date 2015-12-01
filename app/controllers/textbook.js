@@ -1,11 +1,15 @@
-var Textbook = require('../models/textbook');       //电影数据模型
-var Subject = require('../models/subject'); //电影分类模型
+var Textbook = require('../models/textbook');
+var Subject = require('../models/subject');
 var TradeRequest = require('../models/traderequest');
 var CommentTextbook = require('../models/comment');
-var underscore = require('underscore');   //该模块用来对变化字段进行更新
-var fs = require('fs');						//读写文件模块
-var path = require('path');					//路径模块
-console.log('here');
+var underscore = require('underscore');
+var fs = require('fs');
+var path = require('path');
+var View = require('../models/view');
+var async = require('async');
+var recommendations = require('../recommendations');
+
+
 exports.detail = function(req,res){
 	var suser = req.session.user;
 	var _id = req.params.id;
@@ -15,18 +19,62 @@ exports.detail = function(req,res){
 			console.log(err);
 		}
 	});
+	//find all the comments about this textbook and display them
 	Textbook.findById(_id,function(err,textbook){
 		CommentTextbook
 			.find({textbook:_id})
 			.populate('from','name image')
-			.populate('reply.from','name image')//查找评论人和回复人的名字
+			.populate('reply.from','name image')
 			.populate('reply.to','name')
 			.exec(function(err,comments){
-				res.render('textbook_detail',{
-					title:'Detail',
-					sessionuser: suser,
-					comments: comments,
-					textbook:textbook
+				// Record view of textbook by user
+				View.findOne({'textbook': textbook, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.textbook = textbook;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
+				// Record view of subject by user
+				View.findOne({'subject': textbook.subject, 'user': suser})
+				.exec(function(viewErr, existingView) {
+					if (existingView) {
+						existingView.views++;
+						existingView.save();
+					}
+					else {
+						var newView = new View();
+						newView.subject = textbook.subject;
+						newView.user = suser;
+						newView.save();
+					}
+				});
+
+				var recommended = [];
+				Textbook.find({subject: textbook.subject, _id: {$ne: textbook}})
+				.limit(5)
+				.exec(function(err, textbooks) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						recommendations.rankTextbooks(suser, textbooks, function(rankedTextbooks) {
+							res.render('textbook_detail', {
+								title:'Detail',
+								sessionuser: suser,
+								comments: comments,
+								textbook: textbook,
+								recommended: rankedTextbooks,
+							});
+						});
+					}
 				});
 			})
 		});
@@ -38,7 +86,7 @@ exports.new = function(req,res){
 		res.render('textbook_new',{
 			title:'Create Textbook Page',
 			subjects:subjects,
-            sessionuser: suser,
+      sessionuser: suser,
 			textbook:{}
 		});
 	});
@@ -54,7 +102,7 @@ exports.savePhoto = function(req, res, next){
 			var timestamp = Date.now();  //get time
 			var type = photoData.type.split('/')[1]; //get type
 			var photo = timestamp + '.' + type;   //rename
-			//save to /public/upload directory
+			//save to /public/upload_textbook directory
 			var newPath = path.join(__dirname,'../../','/public/upload_textbook/' + photo);
 
 			fs.writeFile(newPath,data,function(err){
@@ -72,7 +120,7 @@ exports.submit = function(req, res){
 	var id = req.body.textbook._id;
 	var textbookObj = req.body.textbook;
 	var _textbook;
-	//如果有自定义上传海报  将textbookObj中的海报地址改成自定义上传海报的地址
+	//if there is a uploaded photo, save the photo
 	if(req.photo){
 		textbookObj.photo = req.photo;
 	}
@@ -81,7 +129,7 @@ exports.submit = function(req, res){
 			if(err){
 				console.log(err);
 			}
-			if(textbook){
+			if(textbook){    //if textbook already exists, update its info (redundant)
 				_textbook = underscore.extend(textbook,textbookObj);
 				_textbook.save(function(err,textbook){
 					if(err){
@@ -90,24 +138,27 @@ exports.submit = function(req, res){
 					res.redirect('/textbook/' + textbook._id);
 				});
 			}
-			else{
-                textbookObj.userId = req.session.user._id;
+			else{   //create a new textbook object
+        textbookObj.userId = req.session.user._id;              //what does this code do? Oh i see
 				_textbook = new Textbook(textbookObj);
 				var subjectId = textbookObj.subject;
 				var subjectName = textbookObj.subjectName;
 
+				_textbook.user = req.session.user;                     //add user object connected to this textbook
+
+         //save this new created textbook
 				_textbook.save(function(err,textbook){
 					if(err){
 						console.log(err);
 					}
-					if(subjectId){
+					if(subjectId){  //if user chooses a subject
 						Subject.findById(subjectId,function(err,subject){
 							subject.textbooks.push(textbook._id);
 							subject.save(function(err,subject){
 								res.redirect('/textbook/' + textbook._id);
 							});
 						});
-					}else if(subjectName){
+					}else if(subjectName){   //if the user creates a new subject
 						var subject = new Subject({
 							name:subjectName,
 							textbooks:[textbook._id]
@@ -119,6 +170,31 @@ exports.submit = function(req, res){
 							});
 						});
 					}
+					else{   //of neither, create a subject called other and save the book
+						Subject.findOne({name:'Other'},function(err,subjectObj){
+							if (err){
+								console.log(err);
+							}
+							if (!subjectObj){
+								var subject = new Subject({
+									name:'Other',
+									textbooks:[textbook._id]
+								});
+								subject.save(function(err,subject){
+									textbook.subject = subject._id;
+									textbook.save(function(err,textbook){
+										res.redirect('/textbook/' + textbook._id);
+									});
+								});
+							}
+							else{      //if other subject already exists, then add the book
+									subjectObj.textbooks.push(textbook._id);
+									subjectObj.save(function(err,subjectObj){
+										res.redirect('/textbook/' + textbook._id);
+									});
+							}
+	          })
+					}
 				});
 			};
 		});
@@ -128,7 +204,7 @@ exports.save = function(req,res){
 	var id = req.body.textbook._id;
 	var textbookObj = req.body.textbook;
 	var _textbook;
-	//如果有自定义上传海报  将textbookObj中的海报地址改成自定义上传海报的地址
+	//if there is a uploaded photo, save the photo
 	if(req.photo){
 		textbookObj.photo = req.photo;
 	}
@@ -139,7 +215,7 @@ exports.save = function(req,res){
 		}
 
 		if(textbook){
-			//使用underscore模块的extend函数更新变化的字段
+			//use underscore to extend the existing info
 			_textbook = underscore.extend(textbook,textbookObj);
 			_textbook.save(function(err,textbook){
 				if(err){
@@ -170,6 +246,23 @@ exports.update = function(req,res){
 	});
 };
 
+exports.mylist = function(req,res){
+	var suser = req.session.user;
+	var sessionid = req.session.user._id;
+	Textbook.find({userId:sessionid})
+			.populate('subject','name')
+			.exec(function(err,textbooks){
+					if(err){
+							console.log(err);
+					}
+					res.render('textbook_list_regular',{
+							title:'Textbook List',
+							sessionuser: suser,
+							textbooks:textbooks
+					});
+			});
+}
+
 exports.list = function(req,res){
     var suser = req.session.user;
     var role = req.session.user.role;
@@ -199,20 +292,18 @@ exports.list = function(req,res){
                     textbooks: textbooks
                 });
             });
-            
+
     }
 };
 
 exports.del = function(req,res){
-	//获取客户端Ajax发送的URL值中的id值
 	var id  = req.query.id;
 	if(id){
-        //Removing textbooks removes the related traderequests
-        TradeRequest.remove({$or:[ {textbookId: id}, {offerTextbookId: id}]}, function(err, rqs){
-            if (err) console.log(err);
-        });
+    //Removing textbooks removes the related traderequests
+    TradeRequest.remove({$or:[ {textbookId: id}, {offerTextbookId: id}]}, function(err, rqs){
+        if (err) console.log(err);
+    });
 
-		//如果id存在则服务器中将该条数据删除并返回删除成功的json数据
 		Textbook.remove({_id:id},function(err,textbook){
 			if(err){
 				console.log(err);

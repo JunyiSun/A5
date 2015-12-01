@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
+var bcrypt = require('bcrypt');
 
 var UserSchema = new Schema({
 	email:{
@@ -8,17 +9,21 @@ var UserSchema = new Schema({
 		type:String
 	},
 	password:String,
-	newpassword: String,
+	google:{
+		id: String,
+		token: String,
+		email: String,
+		name: String
+	},
 	name: String,
 	description: String,
 	image: String,
 	devices: String,
 	ip: String,
 	geo: Object,
+	messages: [{type: ObjectId, ref: 'Message'}],
 	/*
 	0:nomal user
-	1:verified user
-	2:prefessional user
 	>10: admin
 	=20:super admin
 	 */
@@ -58,13 +63,11 @@ UserSchema.pre('save',function(next){
 
 
 UserSchema.methods = {
-	comparePassword : function(password,cb){
-		if(password == this.password){
-			cb(null,true)
-		}
-		else{
-			cb(null,false)
-		}
+	generateHash: function(password){
+		return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
+	},
+	comparePassword : function(password){
+		return bcrypt.compareSync(password, this.password)
 	}
 };
 
