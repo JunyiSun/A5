@@ -325,4 +325,17 @@ exports.updateRating = function(req,res){
 
 	
 };
+exports.decreaseRating = function(req,res){
+	var _id = req.query.id;
+  	var suser = req.session.user;
+	console.log('hey');
+	Textbook.update({_id:_id},{$inc:{rating:-1}},function(err){
+					if(err){
+						console.log(err);
+					}
+					res.json({success:1});
+			  });
+
+	
+};
 

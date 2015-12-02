@@ -72,6 +72,7 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
     app.get('/regular/textbook/list',Textbook.mylist);
 
     app.put('/rating',User.signinRequired, Textbook.updateRating);
+    app.put('/ratingdown',User.signinRequired, Textbook.decreaseRating);
     app.get('/textbook/:id',Textbook.detail);
 
     app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
