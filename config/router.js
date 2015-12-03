@@ -19,15 +19,15 @@ module.exports = function(app,passport){
 
   // index page
 	app.get('/',Index.index);
-  app.get('/subject',Index.search);
+    app.get('/subject',Index.search);
 
 //section of Google signin ==================================================
 
-app.get('/auth/google', passport.authenticate('google',{scope: ['profile','email']}));
-app.get('/auth/google/callback',
+    app.get('/auth/google', passport.authenticate('google',{scope: ['profile','email']}));
+    app.get('/auth/google/callback',
 	passport.authenticate('google', { successRedirect: '/',
 																			failureRedirect: '/signin' }));
-app.get('/connect/google',passport.authorize('google',{scope:['profile','email']}));
+    app.get('/connect/google',passport.authorize('google',{scope:['profile','email']}));
 //section of user ==============================================================
 	// signup
 	app.get('/signup',User.showSignup);
@@ -42,17 +42,17 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
 	User.signinRequired
 	User.adminRequired
 	 */
-	app.post('/user/saveprofile',multipartMiddleware,User.signinRequired,User.saveImage, User.save);
+	app.post('/user/saveprofile', multipartMiddleware,User.signinRequired,User.saveImage, User.save);
 	//app.get('/changepassword',User.signinRequired,User.showchange)
 	app.post('/user/changepassword',multipartMiddleware,User.signinRequired,User.changepwd);
 
     app.get('/regular/user/list',User.signinRequired,User.regularList);
 	app.get('/regular/user/profile/:id',User.signinRequired,User.regularProfile);
-	app.get('/regular/user/edit/:id',User.signinRequired,User.regularEdit);
+	app.get('/regular/user/edit/:id', User.signinRequired, User.regularEdit);
 
-	app.get('/admin/user/list',User.signinRequired,User.adminRequired,User.adminList);
-	app.get('/admin/user/profile/:id',User.signinRequired,User.adminRequired,User.adminProfile);
-	app.get('/admin/user/edit/:id',User.signinRequired, User.adminRequired,User.adminEdit);
+	app.get('/admin/user/list',User.signinRequired, User.adminRequired, User.adminList);
+	app.get('/admin/user/profile/:id',User.signinRequired, User.adminRequired, User.adminProfile);
+	app.get('/admin/user/edit/:id',User.signinRequired, User.adminRequired, User.adminEdit);
 	app.delete('/admin/user/list', User.signinRequired, User.adminRequired, User.del);
 	app.put('/admin/user/profile', User.signinRequired, User.adminRequired, User.makeAdmin);
 

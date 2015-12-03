@@ -11,9 +11,12 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 var passport = require('passport');
+var Ddos = require('ddos');
 
 var port = process.env.PORT || 3000;
 var app = express();
+var ddos = new Ddos();
+app.use(ddos.express);
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a5';
 mongoose.connect(dbUrl);
@@ -40,6 +43,7 @@ var walk = function(path) {
 walk(models_path);
 
 
+
 app.set('views','./app/views/pages');  //views files
 app.set('view engine','jade');//set templete
 app.use(express.static(path.join(__dirname,'public')));
@@ -60,10 +64,14 @@ app.use(session({
 	})
 }));
 
+
+
+
 app.set('view options', { layout: false });
 app.use(device.capture());
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 var env = process.env.NODE_ENV || 'development';
 

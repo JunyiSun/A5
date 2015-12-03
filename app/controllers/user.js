@@ -8,7 +8,6 @@ var path = require('path');
 var device = require('express-device');
 var requestIp = require('request-ip');
 
-
 //sign up
 exports.signup = function(req,res){
 	var _user = req.body.user;
