@@ -20,6 +20,8 @@ block content
           dd= textbook.summary
           dt Rating
           dd= textbook.rating
+          button.btn.btn-primary.increaseRating(type="button", data-id="#{textbook._id}") Up Rate
+          button.btn.btn-danger.decreaseRating(type="button", data-id="#{textbook._id}") Down Rate
           dt Textbook Photo
           dd
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
@@ -90,3 +92,4 @@ block content
                 else
                   a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Please Log In To Comment
   script(src="/js/comment.js")
+  script(src="/js/editRating.js")

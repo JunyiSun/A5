@@ -13,6 +13,7 @@ block content
             th Edition
             th Last Update
             th pv
+            th rating
             th View
             th Edit
             th Delete
@@ -29,6 +30,7 @@ block content
               td #{item.edition}
               td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
               td #{item.pv}
+              td #{item.rating}
               td: a(href="/textbook/#{item._id}") View
               td: a(href="/admin/textbook/update/#{item._id}") Edit
               td

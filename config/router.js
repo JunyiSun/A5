@@ -70,12 +70,21 @@ app.get('/connect/google',passport.authorize('google',{scope:['profile','email']
     app.post('/regular/textbook',multipartMiddleware, Textbook.savePhoto, Textbook.submit);
     app.post('/regular/textbook/edit',multipartMiddleware, Textbook.savePhoto, Textbook.save);
     app.get('/regular/textbook/list',Textbook.mylist, User.signinRequired);
-
     app.get('/textbook/:id', User.signinRequired, Textbook.detail);
 
     app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
     app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
     app.delete('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.del);
+
+    app.put('/rating',User.signinRequired, Textbook.updateRating);
+    app.put('/ratingdown',User.signinRequired, Textbook.decreaseRating);
+    app.get('/textbook/:id', User.signinRequired, Textbook.detail);
+
+    app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
+    app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
+    
+    app.delete('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.del);
+
 
 
 //section of comment===========================================================

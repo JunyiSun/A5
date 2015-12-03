@@ -9,6 +9,7 @@ var View = require('../models/view');
 var async = require('async');
 var recommendations = require('../recommendations');
 
+
 exports.detail = function(req,res){
 	var suser = req.session.user;
 	var _id = req.params.id;
@@ -311,3 +312,30 @@ exports.del = function(req,res){
 		});
 	}
 };
+exports.updateRating = function(req,res){
+	var _id = req.query.id;
+  	var suser = req.session.user;
+	console.log('hey');
+	Textbook.update({_id:_id},{$inc:{rating:1}},function(err){
+					if(err){
+						console.log(err);
+					}
+					res.json({success:1});
+			  });
+
+	
+};
+exports.decreaseRating = function(req,res){
+	var _id = req.query.id;
+  	var suser = req.session.user;
+	console.log('hey');
+	Textbook.update({_id:_id},{$inc:{rating:-1}},function(err){
+					if(err){
+						console.log(err);
+					}
+					res.json({success:1});
+			  });
+
+	
+};
+
