@@ -15,7 +15,7 @@ var Ddos = require('ddos');
 
 var port = process.env.PORT || 3000;
 var app = express();
-var ddos = new Ddos();
+var ddos = new Ddos({burst: 50, limit: 100, maxexpiry: 5});
 app.use(ddos.express);
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a5';
