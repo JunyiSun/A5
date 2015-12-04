@@ -1,99 +1,90 @@
 'use strict';
 
-//var utils = require('utils');
 var should = require('should');
 var mongoose = require('mongoose');
 var TradeRequest = require('../app/models/traderequest');
 var Textbook = require('../app/models/textbook');
 var Subject = require('../app/models/subject');
 
-mongoose.connect('mongodb://localhost/tr_test');
+var textbook1, textbook2;
 
-beforeEach(function (done) {
+describe('<Unit Test: TradeRequest', function () {
+    describe('Models', function() {
+		before(function(done) {
+	  		textbook1 = {
+				title: 'Title1',
+				author: 'A'
+                
+            };
+            textbook2 = {
+                title: 'Title2',
+                author: 'B'
+            }
 
-    function clearDB() {
-        for (var i in mongoose.connection.collections) {
-            mongoose.connection.collections[i].remove(function() {});
-        }
-        return done();
-    }
-
-    if (mongoose.connection.readyState === 0) {
-        mongoose.connect(config.db.test, function (err) {
-        if (err) {
-           throw err;
-        }
-        return clearDB();
-        });
-        } else {
-            return clearDB();
-        }
-});
-
-afterEach(function (done) {
-    mongoose.disconnect();
-    return done();
-});
-
-describe('TradeRequests: models', function () {
-
+            done();  
+		});
+	
+	});
     describe('#create()', function () {
         it('should create a new TradeRequest', function (done) {
-            var subject = {
-                name: "Science",
-                textbooks: []
-            }
-            Subject.create(subject, function(errS, createdSubject){
-                should.not.exist(errS);
-                // Creating two textbooks for the traderequest
-                var t1 = {
-                    title: "Some title",
-                    author: "a",
-                    edition: "1st",
-                    location: "",
-                    language: "EN",
-                    summary: "",
-                    photo: "",
-                    userId: "",
-                    subject: createdSubject._id
-                };
-                var t2 = {
-                    title: "Other Title",
-                    author: "b",
-                    edition: "2nd",
-                    location: "",
-                    language: "FR",
-                    summary: "",
-                    photo: "",
-                    userId: "",
-                    subject: createdSubject._id
-                };
-                Textbook.create(t1, function (errT1, cText1){
-                    should.not.exist(errT1);
-                    Textbook.create(t2, function (errT2, cText2){
-                        should.not.exist(errT2);
-                        
-                        var tr = {
-                            userId: "",
-                            textbookId: cText1._id + "",
-                            offerId: "",
-                            offerTextbookId: cText2._id + "",
-                            status: 0,             //-1: Rejected, 0: Pending, 1: Complete
-                            name: (cText1.title + " for " + cText2.title)
-                        };
-                        
-                        TradeRequest.create(tr, function(errTR, cTR){
-                            should.not.exist(errTR);
-                            cTR.name.should.equal("Some title for Other Title");
-                            cTR.textbookId.should.equal(cText1._id + "");
-                            cTR.offerTextbookId.should.equal(cText2._id + "");
-                            done();
-                        });
-                        
+            var _tb1 = new Textbook(textbook1);
+            var _tb2 = new Textbook(textbook2);
+            _tb1.save(function(err){
+                should.not.exist(err);
+                _tb2.save(function(err){
+                    should.not.exist(err);
+                    
+                    var trmodel = {
+                        userId: "",
+                        textbookId: _tb1._id,
+                        offerUserId: "",
+                        offerTextbookId: _tb2._id,
+                        status: 0,  
+                        name: (_tb1.title + " for " + _tb2.title)
+                    }
+                    
+                    var tr = new TradeRequest(trmodel);
+                    tr.save(function (err){
+                        should.not.exist(err);
+                        tr.remove(function(err){
+                            should.not.exist(err);
+                        })
                     });
                 });
             });
+            done();
+        });
+        it('new traderequest should have name of the form \'x for y\'', function (done) {
+            var _tb1 = new Textbook(textbook1);
+            var _tb2 = new Textbook(textbook2);
+            _tb1.save(function(err){
+                should.not.exist(err);
+                _tb2.save(function(err){
+                    should.not.exist(err);
+                    
+                    var trmodel = {
+                        userId: "",
+                        textbookId: _tb1._id,
+                        offerUserId: "",
+                        offerTextbookId: _tb2._id,
+                        status: 0,  
+                        name: (_tb1.title + " for " + _tb2.title)
+                    }
+                    
+                    var tr = new TradeRequest(trmodel);
+                    tr.save(function (err){
+                        should.not.exist(err);
+                        tr.name.should.equal("Title1 for Title2");
+                        tr.remove(function(err){
+                            should.not.exist(err);
+                        })
+                    });
+                });
+            });
+            done();
+        });
+        after(function(done){
+            done();
         });
     });
-
 });
