@@ -106,9 +106,24 @@ exports.complete = function(req, res){
     if (id){
         TradeRequest.findById(id, function(err, tr){
             if (tr){
-                tr.update(n, function (err, uptr){
-                    res.json({success: 1});
+                Textbook.findById(tr.textbookId, function(err, tb1){
+                    if (tb1){
+                        Textbook.findById(tr.offerTextbookId, function(err, tb2){
+                            if (tb2){
+                                var up1 = {userId: tb2.userId}, up2 = {userId: tb1.userId};
+                                tb1.update(up1, function(err, uptb1){
+                                    tb2.update(up2, function(err, uptb2){
+                                        tr.update(n, function (err, uptr){
+                                            res.json({success: 1});
+                                        });
+                                    });
+                                });
+                                
+                            }
+                        });
+                    }
                 });
+                
             }
         });
     }
