@@ -4,10 +4,10 @@ var ObjectId = Schema.Types.ObjectId;
 
 var TextbookSchema = new Schema({
 	title: String,
-  author: String,
-  edition: String,
+    author: String,
+    edition: String,
 	location: String,
-  language: String,
+    language: String,
 	summary: String,
 	photo: String,
 	userId: String,         //user who creates this textbook
@@ -15,24 +15,24 @@ var TextbookSchema = new Schema({
 		type:ObjectId,
 		ref:'Subject'
 	},
-  pv:{
+    pv:{
 	  type:Number,
 	  default:0
 	},
-  meta: {
-    createAt: {
-  	  type: Date,
-  	  default: Date.now()
-      },
-    updateAt: {
-      type: Date,
-      default: Date.now()
+    meta: {
+        createAt: {
+        type: Date,
+        default: Date.now()
+        },
+        updateAt: {
+            type: Date,
+            default: Date.now()
+        }
+    },
+    rating:{
+        type:Number,
+        default:100
     }
-  },
-  rating:{
-	  type:Number,
-	  default:100
-	}
 });
 
 TextbookSchema.pre('save',function(next){

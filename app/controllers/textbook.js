@@ -86,7 +86,7 @@ exports.new = function(req,res){
 		res.render('textbook_new',{
 			title:'Create Textbook Page',
 			subjects:subjects,
-      sessionuser: suser,
+            sessionuser: suser,
 			textbook:{}
 		});
 	});
