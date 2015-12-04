@@ -18,10 +18,11 @@ block content
           dd= textbook.location
           dt Summary
           dd= textbook.summary
-          dt Rating
-          dd= textbook.rating
-          button.btn.btn-primary.increaseRating(type="button", data-id="#{textbook._id}") Up Rate
-          button.btn.btn-danger.decreaseRating(type="button", data-id="#{textbook._id}") Down Rate
+          .rate
+              dt Rating
+              dd=textbook.rating
+              button.btn.btn-primary.increaseRating(type="button", data-id="#{textbook._id}") Up Rate
+              button.btn.btn-danger.decreaseRating(type="button", data-id="#{textbook._id}") Down Rate
           dt Textbook Photo
           dd
             img(src="/upload_textbook/#{textbook.photo}", style="width:250px;height:250px;")
