@@ -12,11 +12,13 @@ var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var Ddos = require('ddos');
+var compression = require('compression');
 
 var port = process.env.PORT || 3000;
 var app = express();
 var ddos = new Ddos({burst: 50, limit: 100, maxexpiry: 5});
 app.use(ddos.express);
+app.use(compression());
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a5';
 mongoose.connect(dbUrl);
