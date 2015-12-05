@@ -8,6 +8,10 @@ var Subject = require('../app/models/subject');
 
 var textbook1, textbook2;
 
+if (mongoose.connection.readyState == 0){
+    mongoose.connect('mongodb://localhost/a5_test');
+}
+
 describe('<Unit Test: TradeRequest', function () {
     describe('Models', function() {
 		before(function(done) {
