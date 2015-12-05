@@ -2,7 +2,7 @@
   .container-fluid
     .navbar-header.clearfix
     a.navbar-brand(href="/")
-      img(src="/images/fullpage/logo.jpg" alt="fullpageImg", style="width:50px;height:50px;")
+      img(src="/images/fullpage/logo.png" alt="fullpageImg", style="width:50px;height:50px;")
     if sessionuser
       p.navbar-text.navbar-right
         a(href="/regular/user/profile/#{sessionuser._id}"): span Welcome: #{sessionuser.name}
@@ -55,11 +55,8 @@
   .navWrap.clearfix
     .navLogo
       a(href="/regular/textbook/new") I want to sell my textbook
-    .navSearch     
+    .navSearch
       form(method='GET', action='/subject')
         input(type='text', name='q' placeholder="Search Textbook")
         span
-          button.btn.btn-default(type='submit') Search 
-      
-        
-    
+          button.btn.btn-default(type='submit') Search
