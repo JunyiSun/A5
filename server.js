@@ -20,6 +20,20 @@ var ddos = new Ddos({burst: 50, limit: 100, maxexpiry: 5});
 app.use(ddos.express);
 app.use(compression());
 
+var compressor = require('node-minify');
+
+// Use Google Closure to optimize JS
+new compressor.minify({
+    type: 'gcc',
+    fileIn: 'public/js/*.js',
+    fileOut: 'public/js-dist/base-onefile-gcc.js',
+    callback: function(err, min) {
+        if (err) {
+            console.log(err);
+        }
+    }
+});
+
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/a5';
 mongoose.connect(dbUrl);
 

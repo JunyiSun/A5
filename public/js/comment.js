@@ -79,10 +79,10 @@ $(function(){
 
 		$.ajax({
 			url:'/textbook/:id?cid='+cid+'&did='+did,
-			type:'DELETE',
+			type:'DELETE'
 		}).done(function(results){
 			if(results.success === 1){
-				
+
 				$omediaBody.parent().remove();
 			}
 		});
