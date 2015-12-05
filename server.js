@@ -62,7 +62,7 @@ walk(models_path);
 
 app.set('views','./app/views/pages');  //views files
 app.set('view engine','jade');//set templete
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname,'public'), {maxAge: '1d'}));
 app.locals.moment = require('moment');
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
