@@ -27,9 +27,11 @@ module.exports = {
                     }
                     else {
                         // Weight of the result should be the total number of views for the textbook and its subject by the user
-                        pair[1] += viewResults.reduce(function(previousView, currentView, currentIndex, array) {
-                            return previousView.views + currentView.views;
-                        });
+                        if (viewResults.length > 0) {
+                            pair[1] += viewResults.reduce(function(previousView, currentView, currentIndex, array) {
+                                return previousView.views + currentView.views;
+                            });
+                        }
                     }
                     taskCallback()
                 });
