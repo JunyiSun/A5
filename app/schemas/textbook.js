@@ -13,7 +13,8 @@ var TextbookSchema = new Schema({
 	userId: String,         //user who creates this textbook
 	subject:{
 		type:ObjectId,
-		ref:'Subject'
+		ref:'Subject',
+		index: true
 	},
     pv:{
 	  type:Number,

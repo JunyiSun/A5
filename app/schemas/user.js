@@ -6,7 +6,8 @@ var bcrypt = require('bcrypt');
 var UserSchema = new Schema({
 	email:{
 		unique:true,
-		type:String
+		type:String,
+		index: true,
 	},
 	password:String,
 	google:{

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 var SubjectSchema = new Schema({
-  name: String,
+  name: {type: String, index: true},
   textbooks: [{type: ObjectId, ref: 'Textbook'}],
   meta: {
     createAt: {

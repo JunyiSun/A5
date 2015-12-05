@@ -5,9 +5,9 @@ var ObjectId = Schema.Types.ObjectId;
 var TradeRequestSchema = new Schema({
     userId: String,
     textbookId: String,
-    offerUserId: String,
-    offerTextbookId: String,
-    status: Number,             //-1: Rejected, 0: Pending, 1: Complete
+    offerUserId: {type: String, index: true},
+    offerTextbookId: {type: String, index: true},
+    status: {type: Number, index: true},             //-1: Rejected, 0: Pending, 1: Complete
     name: String,
     meta: {
         createAt: {
