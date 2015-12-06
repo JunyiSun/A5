@@ -3,37 +3,40 @@ extends ../layout
 block content
   .container
     .row
-      table.table.table-hover.table-bordered
-        thead
-          tr
-            th Trade Requests From Other Users
-            th Options
-        tbody
-          each item in traderequests
-            tr(class="item-id-#{item._id}")
-              td #{item.name}
-              td
-                button.btn.btn-success.traderequestCompl(type="button", data-id="#{item._id}") Complete Request
-                button.btn.btn-danger.traderequestDel(type="button", data-id="#{item._id}") Reject Request
-      table.table.table-hover.table-bordered
-        thead
-          tr
-            th My Pending Trade Requests
-        tbody
-          each item in pending_traderequests
-            tr(class="item-id-#{item._id}")
-              td #{item.name}
-      table.table.table-hover.table-bordered
-        thead
-          tr
-            th Completed Trade Requests
-            th Status
-        tbody
-          each item in complete_traderequests
-            tr(class="item-id-#{item._id}")
-              td #{item.name}
-              if item.status == "-1"
-                td Rejected
-              else
-                td Completed
+      .col-md-6
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th Trade Requests From Others
+              th Options
+          tbody
+            each item in traderequests
+              tr(class="item-id-#{item._id}")
+                td #{item.name}
+                td
+                  button.btn.btn-success.traderequestCompl(type="button", data-id="#{item._id}") Complete Request
+                  button.btn.btn-danger.traderequestDel(type="button", data-id="#{item._id}") Reject Request
+      .col-md-3
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th My Pending Trade Requests
+          tbody
+            each item in pending_traderequests
+              tr(class="item-id-#{item._id}")
+                td #{item.name}
+      .col-md-3
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th Trade Requests Log
+              th Status
+          tbody
+            each item in complete_traderequests
+              tr(class="item-id-#{item._id}")
+                td #{item.name}
+                if item.status == "-1"
+                  td Rejected
+                else
+                  td Completed
   script(src="/js/list.js")

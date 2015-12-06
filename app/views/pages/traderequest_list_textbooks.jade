@@ -6,17 +6,19 @@ block content
       .col-sm-4
         h3 Checkout Item Confirmation: 
         h4 Title: #{wanted_textbook.title} 
+        h4 Author: #{wanted_textbook.author}
+        h4 Edition: #{wanted_textbook.edition}
         h4 Price: #{wanted_textbook.price}
         a(href="/textbook/#{wanted_textbook._id}") Go back to see detail
       .col-sm-8
         h1 Please choose your trade method
-        h5 1. I want to pay for this book
+        h4 1. I want to pay for this book
         if sessionuser.role > 10
           a(href="/regular/user/profile/#{wanted_textbook.userId}") Click here to send the seller a Message
         else
           a(href="/regular/user/profile/#{wanted_textbook.userId}") Click here to send the seller a Message
            
-        h5 2. I want to choose one of my own book to trade
+        h4 2. I want to choose one of my own book to trade
         table.table.table-hover.table-bordered
           thead
             tr
