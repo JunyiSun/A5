@@ -3,34 +3,54 @@ block link
   link(href="/css/index.css",rel="stylesheet")
   script(src="/js/index.js")
 block content
-  .wrapper
-    if sessionuser
-      if sessionuser.role > 10
-        p Administrator Options
-        ul 
-          li
-            a(href="/admin/subject/new") Add Subjects
-          li
-            a(href="/admin/subject/list") View Subjects List
-          li
-            a(href="/admin/textbook/list") View All Textbook List
-          li
-            a(href="/regular/textbook/list") View My Textbook List
-          li
-            a(href="/admin/user/list") View User List
-          li
-            a(href="/traderequest/list") View Trade Requests
-      else
-        p Regular User Options
-        ul 
-          li
-            a(href="/regular/textbook/list") View My Textbook List
-          li
-            a(href="/regular/user/list") View User List
-          li
-            a(href="/traderequest/list") View Trade Requests
-    a(href="javascript:;")
-      img(src="/images/fullpage/2.jpg" alt="fullpageImg" style="width:100%;height:300px;")
+  // 展示轮播
+  #ad-carousel.carousel.slide(data-ride='carousel')
+    ol.carousel-indicators
+      li.active(data-target='#ad-carousel', data-slide-to='0')
+      li(data-target='#ad-carousel', data-slide-to='1')
+      li(data-target='#ad-carousel', data-slide-to='2')
+      li(data-target='#ad-carousel', data-slide-to='3')
+      li(data-target='#ad-carousel', data-slide-to='4')
+    .carousel-inner
+      .item.active
+        img(src='images/together.JPG', alt='1 slide')
+        .container
+          .carousel-caption
+            h1 Computer Science
+            p
+              img#barcode(src='', alt='')
+      .item
+        img(src='images/02.jpg', alt='2 slide')
+        .container
+          .carousel-caption
+            h1 Social Science
+            p
+              img#barcode(src='', alt='')
+      .item
+        img(src='images/04.jpg', alt='3 slide')
+        .container
+          .carousel-caption
+            h1 Life Science
+            p
+              img#barcode(src='', alt='')
+      .item
+        img(src='images/10.jpg', alt='4 slide')
+        .container
+          .carousel-caption
+            h1 Humanity
+            p
+              img#barcode(src='', alt='')
+      .item
+        img(src='images/12.jpg', alt='5 slide')
+        .container
+          .carousel-caption
+            h1 Engineering
+            p
+              img#barcode(src='', alt='')
+    a.left.carousel-control(href='#ad-carousel', data-slide='prev')
+      span.glyphicon.glyphicon-chevron-left
+    a.right.carousel-control(href='#ad-carousel', data-slide='next')
+      span.glyphicon.glyphicon-chevron-right
   .container
     .row
       each sub in subjects
@@ -48,4 +68,4 @@ block content
                     .caption
                       h4 #{item.title}
                       p: a.btn.btn-primary(href="/textbook/#{item._id}", role="button") See Detail
-    
+  

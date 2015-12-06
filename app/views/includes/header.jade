@@ -3,19 +3,60 @@
     .navbar-header.clearfix
     a.navbar-brand(href="/")
       img(src="/images/fullpage/logo.png" alt="fullpageImg", style="width:50px;height:50px;")
-    if sessionuser
-      p.navbar-text.navbar-right
-        a(href="/regular/user/profile/#{sessionuser._id}"): span Welcome: #{sessionuser.name}
-        span &nbsp;|&nbsp;
-        a.navbar-link(href="/logout") Log Out
-    else
-      p.navbar-text.navbar-right
-        a(href="auth/google" class="btn btn-danger")
-          span.fa.fa-google Sign in with Google
-        span &nbsp;|&nbsp;
-        a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") Sign Up
-        span &nbsp;|&nbsp;
-        a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Log In
+    .navbar-collapse.collapse
+      ul.navbar-text.navbar-nav
+        li.active
+          a(href="/") Home
+          span &nbsp;|&nbsp;
+        li
+          a(href="/regular/textbook/new") Sell Textbook Now
+          span &nbsp;|&nbsp;
+        if sessionuser
+          if sessionuser.role > 10
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Administrator Options
+                span.caret
+              ul.dropdown-menu(role='menu')
+                li
+                  a(href="/admin/subject/new") Add Subjects
+                li
+                  a(href="/admin/subject/list") View Subjects List
+                li
+                  a(href="/admin/textbook/list") View All Textbook List
+                li
+                  a(href="/regular/textbook/list") View My Textbook List
+                li
+                  a(href="/admin/user/list") View User List
+                li
+                  a(href="/traderequest/list") View Trade Requests
+              span &nbsp;|&nbsp;
+          else
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | User Options
+                span.caret
+              ul.dropdown-menu(role='menu')
+                li
+                  a(href="/regular/textbook/list") View My Textbook List
+                li
+                  a(href="/regular/user/list") View User List
+                li
+                  a(href="/traderequest/list") View Trade Requests 
+              span &nbsp;|&nbsp;         
+      if sessionuser
+        p.navbar-text.navbar-right
+          a(href="/regular/user/profile/#{sessionuser._id}"): span Welcome: #{sessionuser.name}
+          span &nbsp;|&nbsp;
+          a.navbar-link(href="/logout") Log Out
+      else
+        p.navbar-text.navbar-right
+          a(href="auth/google" class="btn btn-danger")
+            span.fa.fa-google Sign in with Google
+          span &nbsp;|&nbsp;
+          a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") Sign Up
+          span &nbsp;|&nbsp;
+          a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") Log In
 #signupModal.modal.fade
   .modal-dialog.m-signForm
     .modal-content
@@ -54,7 +95,6 @@
 .nav
   .navWrap.clearfix
     .navLogo
-      a(href="/regular/textbook/new") I want to sell my textbook
     .navSearch
       form(method='GET', action='/subject')
         input(type='text', name='q' placeholder="Search Textbook")

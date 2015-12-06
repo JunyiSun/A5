@@ -6,7 +6,7 @@ var TextbookSchema = new Schema({
 	title: String,
     author: String,
     edition: String,
-	location: String,
+	course: String,
     language: String,
 	summary: String,
 	photo: String,
