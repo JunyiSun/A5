@@ -1,15 +1,17 @@
 .navTop
   .container-fluid
     .navbar-header.clearfix
-    a.navbar-brand(href="/")
-      img(src="/images/fullpage/logo.png" alt="fullpageImg", style="width:50px;height:50px;")
+    a.navbar-brand(href="/") Da'Database
     .navbar-collapse.collapse
       ul.navbar-text.navbar-nav
         li.active
           a(href="/") Home
           span &nbsp;|&nbsp;
         li
-          a(href="/regular/textbook/new") Sell Textbook Now
+          a(href="/regular/textbook/new") Sell Now
+          span &nbsp;|&nbsp;
+        li
+          a(href="#books") Buy Now
           span &nbsp;|&nbsp;
         if sessionuser
           if sessionuser.role > 10
@@ -95,6 +97,7 @@
 .nav
   .navWrap.clearfix
     .navLogo
+      img(src="/images/fullpage/logo.png" alt="fullpageImg", style="width:50px;height:50px;")
     .navSearch
       form(method='GET', action='/subject')
         input(type='text', name='q' placeholder="Search Textbook")

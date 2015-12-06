@@ -10,7 +10,7 @@ block content
           dd= user.email
           dt Name
           if sessionuser._id == user._id
-            a(href="/admin/user/edit/#{user._id}")
+            a(href="/regular/user/edit/#{user._id}")
               dd= user.name
           else
             dd= user.name
@@ -19,14 +19,14 @@ block content
           dt Profile Image
           dd
             if sessionuser._id == user._id
-              a(href="/admin/user/edit/#{user._id}")
+              a(href="/regular/user/edit/#{user._id}")
                 img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
             else
               img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
           if sessionuser._id == user._id
             dt Edit
             dd 
-              a(href="/admin/user/edit/#{user._id}") Edit
+              a(href="/regular/user/edit/#{user._id}") Edit
         hr
         .panel.panel-success
           .panel-heading

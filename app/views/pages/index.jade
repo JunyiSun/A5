@@ -3,7 +3,6 @@ block link
   link(href="/css/index.css",rel="stylesheet")
   script(src="/js/index.js")
 block content
-  // 展示轮播
   #ad-carousel.carousel.slide(data-ride='carousel')
     ol.carousel-indicators
       li.active(data-target='#ad-carousel', data-slide-to='0')
@@ -51,7 +50,7 @@ block content
       span.glyphicon.glyphicon-chevron-left
     a.right.carousel-control(href='#ad-carousel', data-slide='next')
       span.glyphicon.glyphicon-chevron-right
-  .container
+  .container#books
     .row
       each sub in subjects
         .panel.panel-default

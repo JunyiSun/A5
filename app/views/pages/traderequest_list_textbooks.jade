@@ -3,6 +3,18 @@ extends ../layout
 block content
   .container
     .row
+      h3 Checkout Item Confirmation: 
+      h4 Title: #{wanted_textbook.title} 
+      h4 Price: #{wanted_textbook.price}
+      a(href="/textbook/#{wanted_textbook._id}") Go back to see detail
+      h1 Please choose your trade method
+      h5 1. I want to pay for this book
+      if sessionuser.role > 10
+        a(href="/regular/user/profile/#{wanted_textbook.userId}") Click here to send the seller a Messages
+      else
+        a(href="/regular/user/profile/#{wanted_textbook.userId}") Click here to send the seller a Messages
+         
+      h5 2. I want to choose one of my own book to trade
       table.table.table-hover.table-bordered
         thead
           tr
@@ -11,8 +23,7 @@ block content
             th Author
             th Course
             th Edition
-            th Last Update
-            th pv
+            th Price
             th View
             th 
         tbody  
@@ -26,10 +37,9 @@ block content
               td #{item.author}
               td #{item.course}
               td #{item.edition}
-              td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
-              td #{item.pv}
+              td #{item.price}
               td: a(href="/textbook/#{item._id}") View
               td
-                a.btn.btn-primary(href="/traderequest/make?rqt=#{wanted_textbook._id}&offt=#{item._id}", role="button") Choose Textbook
+                a.btn.btn-primary(href="/traderequest/make?rqt=#{wanted_textbook._id}&offt=#{item._id}", role="button") Choose this book
  
   script(src="/js/list.js")       

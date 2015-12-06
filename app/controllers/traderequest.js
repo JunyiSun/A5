@@ -1,8 +1,8 @@
 var TradeRequest = require('../models/traderequest');
 var Textbook = require('../models/textbook');
-var underscore = require('underscore'); 
-var fs = require('fs');						
-var path = require('path');				
+var underscore = require('underscore');
+var fs = require('fs');
+var path = require('path');
 
 
 //When the user clicks the 'send request' button
@@ -20,14 +20,14 @@ exports.new = function(req,res){
                     console.log(err);
                 }
                 res.render('traderequest_list_textbooks',{
-                    title:'Choose a textbook',
+                    title:'Send Request',
                     sessionuser: suser,
                     wanted_textbook: txtbk,
                     textbooks: textbooks
                 });
             });
        }
-        
+
     });
 };
 
@@ -44,7 +44,7 @@ exports.make = function(req, res){
                 if (err){
                     console.log ("Offered textbook does not exist");
                 }else{
-                    trObj.name = txt.title + " for " + otxt.title;
+                    trObj.name = txt.title + " to trade with " + otxt.title;
                     trObj.userId = txt.userId;
                     trObj.textbookId = requested_txtbk_id;
                     trObj.offerUserId = suser._id;
@@ -53,7 +53,7 @@ exports.make = function(req, res){
                     _traderequest = new TradeRequest(trObj);
                     _traderequest.save(function (err, tr){
                         if (err) console.log(err);
-                        res.redirect('/'); //CHANGE TO THE REQUESTS PAGE LATER
+                        res.redirect('/traderequest/list'); //CHANGE TO THE REQUESTS PAGE LATER
                     });
                 }
             });
@@ -61,7 +61,7 @@ exports.make = function(req, res){
     });
     console.log(requested_txtbk_id);
     console.log(offered_txtbk_id);
-    
+
 };
 
 exports.list = function(req, res){
@@ -81,9 +81,9 @@ exports.list = function(req, res){
                 });
             });
         });
-        
+
     });
-    
+
 };
 
 exports.reject = function(req, res){
@@ -118,12 +118,12 @@ exports.complete = function(req, res){
                                         });
                                     });
                                 });
-                                
+
                             }
                         });
                     }
                 });
-                
+
             }
         });
     }
@@ -141,4 +141,3 @@ exports.del = function(req, res){
 		});
     }
 };
-

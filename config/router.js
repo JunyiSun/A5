@@ -52,7 +52,7 @@ module.exports = function(app,passport){
 
 	app.get('/admin/user/list',User.signinRequired, User.adminRequired, User.adminList);
 	app.get('/admin/user/profile/:id',User.signinRequired, User.adminRequired, User.adminProfile);
-	app.get('/admin/user/edit/:id',User.signinRequired, User.adminEdit);
+	app.get('/admin/user/edit/:id',User.signinRequired, User.adminRequired, User.adminEdit);
 	app.delete('/admin/user/list', User.signinRequired, User.adminRequired, User.del);
 	app.put('/admin/user/profile', User.signinRequired, User.adminRequired, User.makeAdmin);
 
@@ -77,7 +77,7 @@ module.exports = function(app,passport){
 
     app.get('/admin/textbook/update/:id',User.signinRequired,User.adminRequired,Textbook.update);
     app.get('/admin/textbook/list',User.signinRequired,User.adminRequired,Textbook.list);
-    
+
     app.delete('/admin/textbook/list', Textbook.del);
 
 

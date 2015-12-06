@@ -259,7 +259,7 @@ exports.regularEdit = function(req,res){
 	var id = req.params.id;
 	if(id){
 		User.findById(id,function(err,user){
-			res.render('useredit_regular',{
+			res.render('useredit',{
 				title: 'Edit Profile',
 				sessionuser: suser,
 				user: user
@@ -314,7 +314,7 @@ exports.adminEdit = function(req, res){
 	 var suser = req.session.user;
 	 if(id){
 		 User.findById(id,function(err,user){
-			 res.render('useredit_admin',{
+			 res.render('useredit',{
 				 title: 'Edit Profile',
 				 sessionuser: suser,
 				 user: user

@@ -139,12 +139,10 @@ exports.submit = function(req, res){
 				});
 			}
 			else{   //create a new textbook object
-        textbookObj.userId = req.session.user._id;              //what does this code do? Oh i see
+        textbookObj.userId = req.session.user._id;
 				_textbook = new Textbook(textbookObj);
 				var subjectId = textbookObj.subject;
 				var subjectName = textbookObj.subjectName;
-
-				_textbook.user = req.session.user;                     //add user object connected to this textbook
 
          //save this new created textbook
 				_textbook.save(function(err,textbook){
@@ -323,7 +321,7 @@ exports.updateRating = function(req,res){
 					res.json({success:1});
 			  });
 
-	
+
 };
 exports.decreaseRating = function(req,res){
 	var _id = req.query.id;
@@ -336,6 +334,5 @@ exports.decreaseRating = function(req,res){
 					res.json({success:1});
 			  });
 
-	
-};
 
+};

@@ -28,6 +28,10 @@ block content
           .col-sm-10
             input#inputEdition.form-control(type="text", name="textbook[edition]", value=textbook.edition)
         .form-group
+          label.col-sm-2.control-label(for="inputPrice") Price
+          .col-sm-10
+            input#inputPrice.form-control(type="text", name="textbook[price]", value=textbook.price)
+        .form-group
           label.col-sm-2.control-label(for="uploadPhoto") Textbook Photo Upload
           .col-sm-10
             input#uploadPhoto(type="file", name="uploadPhoto")

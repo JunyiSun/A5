@@ -76,14 +76,14 @@ $(function(){
 					break;
 				case 2:
 				//Log in successfully
-				  window.location ="/regular/user/list";
+				  window.location ="/";
 					break;
 				case 3:
 				//Log in successfully
-				  window.location ="/admin/user/list";
+				  window.location ="/";
 					break;
 				default:
-					window.location ="/regular/user/list";
+					window.location ="/";
 			}
 		});
 	});
@@ -101,16 +101,16 @@ $(function(){
 					$('#signupForm .err_tip').html('Account Already Exists').attr('style','block');
 					break;
 				case 1:
-					window.location ="/admin/user/list";
+					window.location ="/";
 					break;
 				case 2:
-				  window.location ="/regular/user/list";
+				  window.location ="/";
 					break;
 				case 3:
 				  $('#signupForm .err_tip').html('Passwords do not match').attr('style','block');
 					break;
 				default:
-					window.location ="/regular/user/list";
+					window.location ="/";
 		  }
 		});
 	});
@@ -133,14 +133,14 @@ $(function(){
 					break;
 				case 2:
 				//Log in successfully
-				  window.location ="/regular/user/list";
+				  window.location ="/";
 					break;
 				case 3:
 				//Log in successfully
-				  window.location ="/admin/user/list";
+				  window.location ="/";
 					break;
 				default:
-					window.location ="/regular/user/list";
+					window.location ="/";
 			};
 		});
 	});
@@ -159,17 +159,17 @@ $(function(){
 					$('#signupForm .err_tip').html('Account Already Exists').attr('style','block');
 					break;
 				case 1:
-					window.location ="/admin/user/list";
+					window.location ="/";
 					break;
 				case 2:
 				//Log in successfully
-				  window.location ="/regular/user/list";
+				  window.location ="/";
 					break;
 				case 3:
 				  $('#signupForm .err_tip').html('Passwords do not match').attr('style','block');
 					break;
 				default:
-					window.location ="/regular/user/list";
+					window.location ="/";
 		 };
 	 });
  });

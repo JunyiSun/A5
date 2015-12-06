@@ -11,6 +11,7 @@ var TextbookSchema = new Schema({
 	summary: String,
 	photo: String,
 	userId: String,         //user who creates this textbook
+	price: String,
 	subject:{
 		type:ObjectId,
 		ref:'Subject',

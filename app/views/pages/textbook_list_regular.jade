@@ -11,6 +11,7 @@ block content
             th Author
             th Course
             th Edition
+            th Price
             th Last Update
             th pv
             th rating
@@ -28,6 +29,7 @@ block content
               td #{item.author}
               td #{item.course}
               td #{item.edition}
+              td #{item.price}
               td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
               td #{item.pv}
               td #{item.rating}

@@ -30,3 +30,25 @@ block content
         .form-group
           .col-sm-offset-5.col-sm-10
           button.btn.btn-info(type="submit") Save 
+      
+      if sessionuser.google === undefined     
+        form(method="POST", action="/user/changepassword")#dChangeForm
+          .modal-header
+            strong Change Password
+          .modal-body.clearfix
+            span.err_tip1(style="display:none;")
+            .form-group.clearfix
+              label(for="dChangeEmail") Email
+              input#dChangeEmail.form-control(name="user[email]", type="text", value=user.email,readonly='readonly')
+            .form-group.clearfix
+              label(for="dChangePassword") Old Password
+              input#dChangePassword.form-control(name="user[password]", type="password")
+            .form-group.clearfix
+              label(for="dChangenewPassword") New Password
+              input#dChangenewPassword.form-control(name="user[newpassword]", type="password")
+            .form-group.clearfix
+              label(for="dChangeconfirmnewPassword") Confirm New Password
+              input#dChangeconfirmnewPassword.form-control(name="user[confirmnewpassword]", type="password")
+          .modal-footer
+            button.btn.btn-success(type="submit") Change Password 
+  script(src='/js/edit.js')
