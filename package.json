@@ -33,7 +33,9 @@
     "compression": "1.6.0"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "loadtest": "*",
+    "superagent": "1.5.0"
   },
   "scripts": {
     "test": "mocha"

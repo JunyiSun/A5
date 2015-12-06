@@ -6,33 +6,17 @@ var TradeRequest = require('../app/models/traderequest');
 var Textbook = require('../app/models/textbook');
 var Subject = require('../app/models/subject');
 
-var textbook1, textbook2;
-
 if (mongoose.connection.readyState == 0){
     mongoose.connect('mongodb://localhost/a5_test');
 }
 
 describe('<Unit Test: TradeRequest', function () {
-    describe('Models', function() {
-		before(function(done) {
-	  		textbook1 = {
-				title: 'Title1',
-				author: 'A'
-
-        };
-            textbook2 = {
-                title: 'Title2',
-                author: 'B'
-            }
-
-            done();
-		});
-
-	});
     describe('#create()', function () {
         it('should create a new TradeRequest', function (done) {
-            var _tb1 = new Textbook(textbook1);
-            var _tb2 = new Textbook(textbook2);
+            var _tb1 = new Textbook();
+            _tb1.title = "Title1";
+            var _tb2 = new Textbook();
+            _tb2.title = "Title2";
             _tb1.save(function(err){
                 should.not.exist(err);
                 _tb2.save(function(err){
@@ -59,11 +43,13 @@ describe('<Unit Test: TradeRequest', function () {
             done();
         });
         it('new traderequest should have name of the form \'x to trade with y\'', function (done) {
-            var _tb1 = new Textbook(textbook1);
-            var _tb2 = new Textbook(textbook2);
-            _tb1.save(function(err){
+            var _tb1 = new Textbook();
+            _tb1.title = "Title1";
+            var _tb2 = new Textbook();
+            _tb2.title = "Title2";
+            _tb1.save(function(err, xtb1){
                 should.not.exist(err);
-                _tb2.save(function(err){
+                _tb2.save(function(err, xtb2){
                     should.not.exist(err);
 
                     var trmodel = {
@@ -76,10 +62,10 @@ describe('<Unit Test: TradeRequest', function () {
                     }
 
                     var tr = new TradeRequest(trmodel);
-                    tr.save(function (err){
-                        should.not.exist(err);
-                        tr.name.should.equal("Title1 to trade with Title2");
-                        tr.remove(function(err){
+                        tr.save(function (err){
+                            should.not.exist(err);
+                            tr.name.should.equal("Title1 to trade with Title2");
+                            tr.remove(function(err){
                             should.not.exist(err);
                         })
                     });
