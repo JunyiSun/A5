@@ -18,16 +18,16 @@ describe('<Unit Test: TradeRequest', function () {
 	  		textbook1 = {
 				title: 'Title1',
 				author: 'A'
-                
+
             };
             textbook2 = {
                 title: 'Title2',
                 author: 'B'
             }
 
-            done();  
+            done();
 		});
-	
+
 	});
     describe('#create()', function () {
         it('should create a new TradeRequest', function (done) {
@@ -37,16 +37,16 @@ describe('<Unit Test: TradeRequest', function () {
                 should.not.exist(err);
                 _tb2.save(function(err){
                     should.not.exist(err);
-                    
+
                     var trmodel = {
                         userId: "",
                         textbookId: _tb1._id,
                         offerUserId: "",
                         offerTextbookId: _tb2._id,
-                        status: 0,  
-                        name: (_tb1.title + " for " + _tb2.title)
+                        status: 0,
+                        name: (_tb1.title + " to trade with " + _tb2.title)
                     }
-                    
+
                     var tr = new TradeRequest(trmodel);
                     tr.save(function (err){
                         should.not.exist(err);
@@ -58,27 +58,27 @@ describe('<Unit Test: TradeRequest', function () {
             });
             done();
         });
-        it('new traderequest should have name of the form \'x for y\'', function (done) {
+        it('new traderequest should have name of the form \'x to trade with y\'', function (done) {
             var _tb1 = new Textbook(textbook1);
             var _tb2 = new Textbook(textbook2);
             _tb1.save(function(err){
                 should.not.exist(err);
                 _tb2.save(function(err){
                     should.not.exist(err);
-                    
+
                     var trmodel = {
                         userId: "",
                         textbookId: _tb1._id,
                         offerUserId: "",
                         offerTextbookId: _tb2._id,
-                        status: 0,  
-                        name: (_tb1.title + " for " + _tb2.title)
+                        status: 0,
+                        name: (_tb1.title + " to trade with " + _tb2.title)
                     }
-                    
+
                     var tr = new TradeRequest(trmodel);
                     tr.save(function (err){
                         should.not.exist(err);
-                        tr.name.should.equal("Title1 for Title2");
+                        tr.name.should.equal("Title1 to trade with Title2");
                         tr.remove(function(err){
                             should.not.exist(err);
                         })

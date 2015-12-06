@@ -3,33 +3,35 @@ extends ../layout
 block content
   .container
     .row
-      img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
-      form.form-horizontal(method="post", action="/user/saveprofile",enctype="multipart/form-data")
-        if user._id
-          input(type="hidden", name="user[_id]", value=user._id)
-        .form-group
-          label.col-sm-2.control-label(for="inputEmail") Email
-          .col-sm-10
-            input#inputEmail.form-control(type="text", name="user[email]", readonly='readonly',value=user.email)
-        .form-group
-          label.col-sm-2.control-label(for="inputPassword") Password
-          .col-sm-10
-            input#inputPassword.form-control(type="password", name="user[password]", readonly='readonly',value=user.password) 
-        .form-group
-          label.col-sm-2.control-label(for="inputName") Display Name
-          .col-sm-10
-            input#inputName.form-control(type="text", name="user[name]", value=user.name)
-        .form-group
-          label.col-sm-2.control-label(for="inputDescription") Description
-          .col-sm-10
-            textarea#inputDescription.form-control(type="text", name="user[description]",maxlength='500')= user.description
-        .form-group
-          label.col-sm-2.control-label(for="uploadImage") Upload Profile Picture
-          .col-sm-10
-            input#uploadImage(type="file", name="uploadImage")
-        .form-group
-          .col-sm-offset-5.col-sm-10
-          button.btn.btn-info(type="submit") Save 
+      .col-sm-4
+        img(src="/upload_user/#{user.image}", alt="#{user.email}",style="width:250px;height:250px;")
+      .col-sm-8
+        form.form-horizontal(method="post", action="/user/saveprofile",enctype="multipart/form-data")
+          if user._id
+            input(type="hidden", name="user[_id]", value=user._id)
+          .form-group
+            label.col-sm-2.control-label(for="inputEmail") Email
+            .col-sm-8
+              input#inputEmail.form-control(type="text", name="user[email]", readonly='readonly',value=user.email)
+          .form-group
+            label.col-sm-2.control-label(for="inputPassword") Password
+            .col-sm-8
+              input#inputPassword.form-control(type="password", name="user[password]", readonly='readonly',value=user.password) 
+          .form-group
+            label.col-sm-2.control-label(for="inputName") Display Name
+            .col-sm-8
+              input#inputName.form-control(type="text", name="user[name]", value=user.name)
+          .form-group
+            label.col-sm-2.control-label(for="inputDescription") Description
+            .col-sm-8
+              textarea#inputDescription.form-control(type="text", name="user[description]",maxlength='500')= user.description
+          .form-group
+            label.col-sm-2.control-label(for="uploadImage") Upload Profile Picture
+            .col-sm-8
+              input#uploadImage(type="file", name="uploadImage")
+          .form-group
+            .col-sm-offset-5.col-sm-8
+            button.btn.btn-info(type="submit") Save 
       
       if sessionuser.google === undefined     
         form(method="POST", action="/user/changepassword")#dChangeForm

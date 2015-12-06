@@ -19,7 +19,7 @@ module.exports = function(app,passport){
 
   // index page
 	app.get('/',Index.index);
-    app.get('/subject',Index.search);
+  app.get('/subject',Index.search);
 
 //section of Google signin ==================================================
 

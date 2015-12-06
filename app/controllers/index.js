@@ -33,7 +33,7 @@ exports.search = function(req, res) {
   var subId = req.query.sub
   var q = req.query.q
   var page = parseInt(req.query.p, 10) || 0
-  var count = 2
+  var count = 5
   var index = page * count
 
   if (subId) {    //search by find subject

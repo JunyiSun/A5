@@ -66,9 +66,6 @@ app.use(session({
 	})
 }));
 
-
-
-
 app.set('view options', { layout: false });
 app.use(device.capture());
 app.use(passport.initialize());

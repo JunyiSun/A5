@@ -12,7 +12,7 @@ block content
               .col-md-2
                 .thumbnail
                   a(href="/textbook/#{item._id}")
-                    img(src="/upload_textbook/#{item.photo}", alt="#{item.title}")
+                    img(src="/upload_textbook/#{item.photo}", alt="#{item.title}", style="width:250px;height:250px;")
                   .caption
                     h4 #{item.title}
                     p: a.btn.btn-primary(href="/textbook/#{item._id}", role="button") See detail
@@ -24,6 +24,6 @@ block content
           - }
           - else {
               li
-                a(href='/results?#{query}&p=#{i}') #{i + 1}
+                a(href='/subject?#{query}&p=#{i}') #{i + 1}
           - }
         - }

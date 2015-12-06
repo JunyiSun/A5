@@ -1,15 +1,15 @@
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
-//获取随机字符串，用来测试user
+//get random str as email
 function getRandomString(len) {
-  if (!len) len = 16; //默认长度为16
+  if (!len) len = 16;
 
   return crypto.randomBytes(Math.ceil(len / 2)).toString('hex');
 }
 
 var should = require('should');
-//var app = require('./app');  //入口文件
+//var app = require('../server');
 var mongoose = require('mongoose');
 var User = require('../app/models/user');
 var User = mongoose.model('User');
@@ -17,23 +17,21 @@ var User = mongoose.model('User');
 var user;
 
 
-// test 测试用例
 describe('<Unit Test', function() {
   describe('Model User:', function() {
-	//测试用例开始前
-	before(function(done) {  
+	// before start
+	before(function(done) {
 	  user = {
-		name: getRandomString(),//长度16的字符串
+		name: getRandomString(),
 		password: 'password'
 	  };
 	  console.log(user.password);
 
-	  done();  
+	  done();
 	});
 	//console.log(user.password);
-	//测试前确认用户getRandomString是不存在的
+	//make sure getRandomString is not existing
 	describe('Before Method save', function() {
-	  //it代表一个测试用例，done调用多次会出问题
 	  it('should begin without test user', function(done) {
 		console.log(user.password);
 		User.find({name: user.name}, function(err, users) {
@@ -42,7 +40,7 @@ describe('<Unit Test', function() {
 	  done();
 	  });
 	});
-	
+
 	describe('User save', function() {
 	  it('should save without problems', function(done) {
 		var _user = new User(user);
@@ -51,20 +49,20 @@ describe('<Unit Test', function() {
 		  should.not.exist(err);
 		  _user.remove(function(err) {
 			should.not.exist(err);
-			
+
 		  });
 		});
 		done();
 	  });
-	  //确认生成的密码没有问题
+	  //make sure generated password is  hashed
 	  it('should password be hashed correctly', function(done) {
 		var password = user.password;
 		var _user = new User(user);
 
 		_user.save(function(err) {
-		  should.not.exist(err);  
+		  should.not.exist(err);
 		  _user.password.should.not.have.length(0);
-		  //对密码进行比对
+		  //compare with password
 		  bcrypt.compare(password, _user.password, function(err, isMatch) {
 			should.not.exist(err);
 			isMatch.should.equal(true);
@@ -75,7 +73,7 @@ describe('<Unit Test', function() {
 		});
 		done();
 	  });
-	  
+
 	  it('should have default role 0', function(done) {
 		var _user = new User(user);
 
@@ -100,7 +98,7 @@ describe('<Unit Test', function() {
 
 			_user1.remove(function(err) {
 			  if (!err) {
-				_user2.remove(function(err) {  
+				_user2.remove(function(err) {
 				});
 			  }
 			});
