@@ -20,7 +20,7 @@ exports.index = function(req, res) {
       }
 
       res.render('index', {
-        title: 'Homepage',
+        title: 'DaDatabase',
 				sessionuser: suser,
         subjects: subjects
       })

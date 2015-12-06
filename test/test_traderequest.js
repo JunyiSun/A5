@@ -19,7 +19,7 @@ describe('<Unit Test: TradeRequest', function () {
 				title: 'Title1',
 				author: 'A'
 
-            };
+        };
             textbook2 = {
                 title: 'Title2',
                 author: 'B'
