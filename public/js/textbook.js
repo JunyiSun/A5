@@ -6,6 +6,9 @@ function funValidate0(obj,min,max){
       'textbook[title]':{
         required: true
       },
+      'textbook[price]':{
+        required: true
+      },
       'textbook[subject]':{
         require_from_group:[1,".subject_group"]
       },
@@ -16,6 +19,9 @@ function funValidate0(obj,min,max){
     messages:{
       'textbook[title]':{
         required: 'Require Textbook Title'
+      },
+      'textbook[price]':{
+        required: 'Require Textbook Price'
       },
       'textbook[subject]':{
         require_from_group:'Subject Required'
